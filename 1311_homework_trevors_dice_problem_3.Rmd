@@ -1,6 +1,6 @@
 ---
 title: "Trevor's Dice Problem"
-author: "Gwendolin Luedtke, Sina Spors"
+author: "Gwendolin Lüdtke, Sina Spors"
 date: "13 November 2018"
 output:
   html_document:
@@ -100,7 +100,7 @@ hist(x,
      freq = FALSE) #Probability densities are plotted
 
 #Plot density function over the histogram (normal distribution)
-m <- mean(x, na.rm = TRUE) #na.rm = TRUE: NA vlues should be stripped before the computation proceeds
+m <- mean(x, na.rm = TRUE) #na.rm = TRUE: NA values should be stripped before the computation proceeds
 sd <-  sd(x, na.rm = TRUE) 
 curve(dnorm(x,m,sd),add=TRUE,lwd=3, col = "red") 
 
