@@ -30,7 +30,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ##Basics
 
-We are going to use the **Bayes' Rule** in order to solve this problem. The Bayes Rule, *that deals with conditional probabilities* is defined as follows: $$p(\kappa|D)=\frac{p(D|\kappa) p(\kappa)}{p(D)}$$ where D are the observed data and  $\kappa$ are the things that we can learn from observed data.
+We are going to use the **Bayes' Rule** in order to solve this problem. The Bayes Rule is defined as follows: $$p(\kappa|D)=\frac{p(D|\kappa) p(\kappa)}{p(D)}$$ where D are the observed data and $\kappa$ are the things that we can learn from observed data.
 
 In R the Bayes' Rule can look as follows:
 
@@ -43,9 +43,9 @@ post <- likeli * prior / evid
 
 ## Assign the given values to variables of the Bayes' Rule
 
-The following approach was **adopted from/by** [Mages Blog](https://magesblog.com/post/2014-07-29-hit-and-run-think-bayes/).
+The following approach was adopted from [Mages Blog](https://magesblog.com/post/2014-07-29-hit-and-run-think-bayes/).
 
-First of all, the **given values** are assign to the **variables** in the formula:
+First of all, the given values are assign to the variables in the formula:
 
 * D = witness said the wildfire was caused by lightning (since it is the only observation that we have)
 * $\kappa$ = wildfire caused by lightning
@@ -58,49 +58,58 @@ From the question stated above we know that:
 It follows from the foregoing that:
 
 ```{r}
-#p(k) 
+#p(k) = p(wildfire caused by lightning)
 prior <- 1/1000
 
-#p(D|k) = p (witness said the wildfire was caused by lightning|wildfire caused by lightning)
+#p(D|k) = p(witness said the wildfire was caused by lightning|wildfire caused by lightning)
 likeli <- 80/100
 ```
 
-Now we are looking for the probability that an eyewitness **actually** observed a wildfire that was caused by a lightning.
+Now we are looking for the probability that the eyewitness is right and actually observed a wildfire that was caused by a lightning.
 
 ##Missing variable
 
-However, in order to find this probability, we need to define $p(D)$ or $P(witness\:said\:the\:wildfire\:was\:caused\:by\:lightning)$.
+However, in order to find this probability, we need to define $p(D)$ or $p(witness\:said\:the\:wildfire\:was\:caused\:by\:lightning)$.
 
 When would the witness say that the wildfire was caused by lightning? 
 **Either**, when the fire was caused by a lightning and so the eyewitness is right 
 **or** when the fire was not caused by a lightning and the witness is incorrect.
 
-
-
-**Here, we can use the law of total probability:**
+In this case, we can use the law of total probability.
 
 $$p(D) = p(D|\kappa)p(\kappa)+p(D|-\kappa)p(-\kappa)$$
 
-where ```-``` indicates the complementary probability.
+where ```-``` indicates the complementary event.
 
 In R we can write this as:
 
 ```{r}
-
-evidence <- (likeli*prior) + ((1-likeli)*(1-prior))
+#p(D) = p(witness said the wildfire was caused by lightning)
+evid <- (likeli*prior) + ((1-likeli)*(1-prior))
 ```
 
-## Final Calculation
+```{r, echo = FALSE}
+#echo = FALSe, do not show chunk, but output
+cat("p(D): ",evid)
+
+```
+
+## Final calculation
 
 ```{r}
-post <- likeli * prior / evidence
-cat("Post: ", post) 
+#p(k|D) = p(wildfire caused by lightning|witness said the wildfire was caused by lightning)
+post <- likeli * prior / evid
 ```
 
-Thus, even if the witness states the wildfire was caused by lightning, the probability of being true is **0,399 %**
+```{r, echo = FALSE}
+cat("p(k|D): ",post)
+```
 
+```{r, echo = FALSE}
+post_pro <- round((post * 100), digits = 1) 
+```
 
-
+Thus, the probability of the witness being true about the wildfire caused by lightning is **``r post_pro`` %**.
 
 
 
