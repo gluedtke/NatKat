@@ -24,7 +24,7 @@ runtime: shiny
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-*Magician Michelle says that she can predict large megathrust earthquakes. well, at least 95 % of the time. Assume that these earthquakes occur with a probability of 10^???5. How likely will Michelle cause a false alarm with her next prediction?*
+*Magician Michelle says that she can predict large megathrust earthquakes. Well, at least 95 % of the time. Assume that these earthquakes occur with a probability of 10 <sup>-5</sup>. How likely will Michelle cause a false alarm with her next prediction?*
 
 ## Recap: Classic RMarkdown HTML
 In order to calculate the probabiliy of a false alarm regarding large megathrust earthquakes, the **Bayes' Rule** should be applied:
@@ -50,7 +50,7 @@ prior <- 1/100000
 likeli <- 95/100
 ```
 
-Again, we are using the **law of total probability* in order to calculate $p(D)$:
+Again, we are using the **law of total probability** in order to calculate $p(D)$:
 
 $$p(D) = p(D|\kappa)p(\kappa)+p(D|-\kappa)p(-\kappa)$$
 
@@ -92,33 +92,55 @@ cat("p(k|D): ",post_false_alarm)
 
 Don't trust Michelle! 
 
-This was a classig RMarkdown Document.
+This was a classic RMarkdown Document.
 
-Now, we can change the input parameters (probability of Michelle beeing right and probability of a megathrust earthquake) in order to see the changes in the posterior. 
+Now, we can change the input parameters (probability of Michelle being right and probability of a megathrust earthquake) in order to see the changes in the posterior. 
 
 The user should use a slider input / ```sliderInput``` in order to change the ranges of the parameters. This kind of input is advantageous since the programmer can define/set the minium and maximum value as well as the steps. 
 
 
 ```{r, echo=FALSE}
 sliderInput("trust", "Trustworthiness (in %):",95, min = 1, max = 100)
-sliderInput("earthquake", "Probability of a megathrust earthquake (in %):",0.00001, min = 0.0000001, max = 100)
-
-
-renderPlot({
-
-  plot(input$trust, input$earthquake)
-})
+sliderInput("earthquake", "Probability of a megathrust earthquake (in %):",1, min = 0.0000001, max = 100)
 
 renderText({
   likeli <- input$trust
   prior <- input$earthquake
-  evid <- (likeli*prior) + ((1-likeli)*(1-prior))
-  post <- likeli * prior / evid
+  evid <- (likeli*prior) + ((100-likeli)*(100-prior))
+  post <- (likeli * prior / evid) * 100
   
-  paste("The trustworthiness is:", post)
-  })
+  #format(post, digits = 2 )
+  sprintf("The trustworthiness is: %.2f %%", post)
+  #paste("The trustworthiness is:", post, " %")
+})
 
+renderPlot({
+  likeli <- input$trust
+  prior <- input$earthquake
+  evid <- (likeli*prior) + ((100-likeli)*(100-prior))
+  post <- (likeli * prior / evid) * 100
   
+  
+  barplot(post,main = "",horiz = TRUE, xlim = c(0, 100), col = c("#4286f4"), names.arg = c("trustworthiness"))
+})
+
+
+
+
+
+#renderPlot({
+
+ # plot(input$trust, input$earthquake)
+#})
+
+#renderText({
+#  likeli <- input$trust
+#  prior <- input$earthquake
+#  evid <- (likeli*prior) + ((1-likeli)*(1-prior))
+#  post <- likeli * prior / evid
+#  
+#  paste("The trustworthiness is:", post)
+#  })
 
 ```
 
