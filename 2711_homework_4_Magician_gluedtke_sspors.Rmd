@@ -15,8 +15,10 @@ runtime: shiny
 
 #<style>
 #body {
-#text-align: justify} 
+#text-align: justify }
 #</style>
+
+
 
 ---
 
@@ -24,29 +26,32 @@ runtime: shiny
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-*Magician Michelle says that she can predict large megathrust earthquakes. Well, at least 95 % of the time. Assume that these earthquakes occur with a probability of 10 <sup>-5</sup>. How likely will Michelle cause a false alarm with her next prediction?*
+*Magician Michelle says that she can predict large megathrust earthquakes. well, at least 95 % of the time. Assume that these earthquakes occur with a probability of $10^???5$. How likely will Michelle cause a false alarm with her next prediction?*
 
-## Recap: Classic RMarkdown HTML
-In order to calculate the probabiliy of a false alarm regarding large megathrust earthquakes, the **Bayes' Rule** should be applied:
+Up to this point, a classic R Markdown HTML document was used for documenting possible applications of the Bayes' Rule. Data which was used in the calculation was already provided by the programmer and the reader could only track the different steps of calculation. Now, we go one step further and include a user input in our calculation of a probability by using the Bayes' Rule. For this reason, we are using a Shiny document.
+
+## Recap: Classic R Markdown HTML
+
+As for the wildfire-problem, the **Bayes' Rule** is applied in order to calculate the probability of a false alarm regarding large mega-thrust earthquakes.
 
 $$p(\kappa|D)=\frac{p(D|\kappa) p(\kappa)}{p(D)}$$
 where
 
-* D = Michelle claims that she can predict megathrust earthquakes 
-* $\kappa$ = occurence of megathrust earthquakes 
+* D = Michelle predicts a mega-thrust earthquakes 
+* $\kappa$ = a mega-thrust earthquake occurs
 
 We can deduce from the values given in the task that:
 
 * $p(D|\kappa)=p(Michelle\:is\:right)=95/100$
-* $p(\kappa)=p(megathrust\:earthquake)=1/100000$
+* $p(\kappa)=p(mega thrust\:earthquake)=1/100000$
 
 In R:
 
 ```{r}
-#p(k) = p(megathrust earthquake)
+#p(k) = p(megathrust earthquake occurs)
 prior <- 1/100000
 
-#p(D|k) = p(Michelle says that there is a megathrust earthquake|megathrust earthquake)
+#p(D|k) = p(Michelle predicts a megathrust earthquake|megathrust earthquake occurs)
 likeli <- 95/100
 ```
 
@@ -60,12 +65,12 @@ evid <- (likeli*prior) + ((1-likeli)*(1-prior))
 ```
 
 ```{r, echo = FALSE}
-#echo = FALSe, do not show chunk, but output
+#echo = FALSE, do not show chunk, but output
 cat("p(D): ",evid)
 
 ```
 
-## Final Calculation
+Finally, the probability of Michelle being right about the occurrence of a mega-thrust earthquake can be calculated:
 
 ```{r}
 #p(k|D) = p(megathrust earthquake|Michelle says that there is a megathrust earthquake)
@@ -76,10 +81,6 @@ post <- likeli * prior / evid
 cat("p(k|D): ",post)
 ```
 
-This is the probability of Michelle being right about the occurence of a megathrust earthquake.
-
-## Shiny 
-
 However, we are looking for the probability of a false alarm. That is why we have to calculate the complementary probability: 
 
 ```{r}
@@ -87,62 +88,181 @@ post_false_alarm <- 1 - post
 ```
 
 ```{r, echo = FALSE}
-cat("p(k|D): ",post_false_alarm)
+cat("p(k|D): ", post_false_alarm)
 ```
 
 Don't trust Michelle! 
 
-This was a classic RMarkdown Document.
+## Shiny R Markdown Documents
 
-Now, we can change the input parameters (probability of Michelle being right and probability of a megathrust earthquake) in order to see the changes in the posterior. 
+https://bookdown.org/yihui/rmarkdown/shiny-documents.html
 
-The user should use a slider input / ```sliderInput``` in order to change the ranges of the parameters. This kind of input is advantageous since the programmer can define/set the minium and maximum value as well as the steps. 
+In contrast to the prior R Markdown HTML, Shiny documents are no longer static documentations. They allow that the user can change parameters of the calculation/analysis and provide a immediate output of the results. 
+
+Instead of "embed a standalone Shiny application within a document", we decided to embed "individual Shiny inputs and outputs in R Markdown".
+
+### Defining the Layout
+
+First of all, we define the layout of the Shiny App. There are different layout options. We are using the function ```sidebarLayout()``` to create an app-layout with a sidebar that contains the input controls and a larger main area that contains the outputs.
+
+```{r, eval = FALSE}
+sidebarLayout(
+  sidePanel(
+    
+  ),
+  mainPanel(
+    
+  )
+)
+
+```
+
+### Selection of Parameters
+
+With the help of Shiny functions (?), the user can now change/select the input parameters:
+* probability of Michelle being right
+* probability of a mega-thrust earthquake
+
+... and can immediately see the changes in the posterior-probability. 
+
+The user should use a ```sliderInput``` in order to change the values of the input parameters. This kind of input is advantageous since the programmer can define the minimum and maximum values as well as the steps.
 
 
-```{r, echo=FALSE}
-sliderInput("trust", "Trustworthiness (in %):",95, min = 1, max = 100)
-sliderInput("earthquake", "Probability of a megathrust earthquake (in %):",1, min = 0.0000001, max = 100)
+###Output
 
-renderText({
-  likeli <- input$trust
-  prior <- input$earthquake
-  evid <- (likeli*prior) + ((100-likeli)*(100-prior))
-  post <- (likeli * prior / evid) * 100
+It is important to use ```renderPlot``` to create [flexible graphics). 
+
+
+```{r}
+
+# Title of the app
+titlePanel("Bayes' Rule")
+
+sidebarLayout(
   
-  #format(post, digits = 2 )
-  sprintf("The trustworthiness is: %.2f %%", post)
-  #paste("The trustworthiness is:", post, " %")
-})
+  sidebarPanel( # For the input controls
+    
+    sliderInput("trust", "Trustworthiness of Michelle:",min = 1, max = 100, value = 95, step = 1, 
+                  post= " %",
+                  animate = TRUE
+    ),
+    
+    sliderInput("earthquake", "Probability of a megathrust earthquake:", 
+                min = 0.0000001, max = 100, value = 0.00001, step = 1,
+                post = " %",
+                animate = TRUE)
 
-renderPlot({
-  likeli <- input$trust
-  prior <- input$earthquake
-  evid <- (likeli*prior) + ((100-likeli)*(100-prior))
-  post <- (likeli * prior / evid) * 100
+    ),
+  
+  mainPanel( # for the outputs
+
+   renderText({
+   
+      likeli <- (input$trust)/100 #divide by 100 to work with xxx
+      prior <- (input$earthquake)/100
+      evid <- (likeli*prior) + ((1-likeli)*(1-prior))
+      post <- likeli * prior / evid
+  
+      #paste("Michelle is right with a probability of ", post, " %")
+     paste("Michelle is wrong and causes false alarm with a probability of ", (1-post), " %")
+      #cat (paste (post, "\n", collapse=""))
+      #format(post, digits = 2 )
+     # sprintf("Michelle is right with a probability of: %.2f %%", post)
+    }),
+   
+   renderPlot({
+
+      likeli <- (input$trust)/100
+      prior <- (input$earthquake)/100
+      evid <- (likeli*prior) + ((1-likeli)*(1-prior))
+      post <- likeli * prior / evid
+      
+      barplot((1-post),main = "",horiz = TRUE, xlim = c(0, 1), col = c("#4286f4"), names.arg =  c("trustworthiness"))
+
+      #barplot((1-post),main = "",horiz = TRUE, xlim = c(0, 1), col = c("#4286f4"), names.arg =  c("trustworthiness"))
+  })
+    
+  )
+)
+
+```
+
+[das kann nachher alles raus]
+## try
+
+see comments on sidebarLayout
+
+use of sliderInput / creation of slider controls
+
+```{r, echo=FALSE, eval=FALSE}
+
+      # Input: Specification of range within an interval ----
+      sliderInput("range", "Range:",
+                  min = 1, max = 1000,
+                  value = c(200,500)),
+
+      # Input: Custom currency format for with basic animation ----
+      sliderInput("format", "Custom Format:",
+                  min = 0, max = 10000,
+                  value = 0, step = 2500,
+                  pre = "$", sep = ",",
+                  animate = TRUE),
+
+    
+  ),
+  
+  mainPanel(
+    # Output: Table summarizing the values entered ----
+     # tableOutput("values")
+  )
   
   
-  barplot(post,main = "",horiz = TRUE, xlim = c(0, 100), col = c("#4286f4"), names.arg = c("trustworthiness"))
-})
+)
 
-
-
-
-
-#renderPlot({
-
- # plot(input$trust, input$earthquake)
-#})
-
-#renderText({
-#  likeli <- input$trust
-#  prior <- input$earthquake
-#  evid <- (likeli*prior) + ((1-likeli)*(1-prior))
-#  post <- likeli * prior / evid
-#  
-#  paste("The trustworthiness is:", post)
-#  })
 
 ```
 
 
+use the function selectInput to creat a box with choises to select from (widgets)
+
+after the selection of single value or range > slider Input anpassen (use of conditionalPanel)
+
+```{r, eval=FALSE}
+
+selectInput("select","Select: Single Value or Range?",
+            c("Single Value" ="sin",
+              "Range" ="rang"),
+            multiple = FALSE
+            )
+
+
+#only show this panel if single values are selected
+conditionalPanel(
+  condition = "input.select == 'sin'",
+  sliderInput(
+    "trust",
+    "Trustworthiness (in %):",95, min = 1, max = 100
+  ),
+  sliderInput("earthquake", "Probability of a megathrust earthquake (in %):",0.00001, min = 0.0000001, max = 100),
+  plotOutput("scatterPlot", height = 300)
+  
+)
+
+conditionalPanel(
+  condition = "input.select == 'rang'",
+  sliderInput(
+    "trust",
+    "Trustworthiness (in %):", min = 1, max = 100, value=c(5,10)
+  ),
+  sliderInput("earthquake", "Probability of a megathrust earthquake (in %):",min = 0.0000001, max = 100,
+  value =c(1,10))
+)
+
+output$scatterPlot <- renderPlot({
+    x <- input$trust
+    y <- input$earthquake
+    plot(x, y)
+})
+
+```
 
