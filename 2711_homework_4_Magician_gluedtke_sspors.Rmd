@@ -26,12 +26,15 @@ runtime: shiny
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-*Magician Michelle says that she can predict large megathrust earthquakes. well, at least 95 % of the time. Assume that these earthquakes occur with a probability of $10^???5$. How likely will Michelle cause a false alarm with her next prediction?*
+<div style="text-align: justify;">
+*Magician Michelle says that she can predict large megathrust earthquakes. well, at least 95 % of the time. Assume that these earthquakes occur with a probability of 10<sup> -5</sup>. How likely will Michelle cause a false alarm with her next prediction?*
 
 Up to this point, a classic R Markdown HTML document was used for documenting possible applications of the Bayes' Rule. Data which was used in the calculation was already provided by the programmer and the reader could only track the different steps of calculation. Now, we go one step further and include a user input in our calculation of a probability by using the Bayes' Rule. For this reason, we are using a Shiny document.
+</div>
 
 ## Recap: Classic R Markdown HTML
 
+<div style="text-align: justify;">
 As for the wildfire-problem, the **Bayes' Rule** is applied in order to calculate the probability of a false alarm regarding large mega-thrust earthquakes.
 
 $$p(\kappa|D)=\frac{p(D|\kappa) p(\kappa)}{p(D)}$$
@@ -46,6 +49,7 @@ We can deduce from the values given in the task that:
 * $p(\kappa)=p(mega thrust\:earthquake)=1/100000$
 
 In R:
+</div>
 
 ```{r}
 #p(k) = p(megathrust earthquake occurs)
@@ -55,7 +59,9 @@ prior <- 1/100000
 likeli <- 95/100
 ```
 
+<div style="text-align: justify;">
 Again, we are using the **law of total probability** in order to calculate $p(D)$:
+</div>
 
 $$p(D) = p(D|\kappa)p(\kappa)+p(D|-\kappa)p(-\kappa)$$
 
@@ -70,7 +76,9 @@ cat("p(D): ",evid)
 
 ```
 
+<div style="text-align: justify;">
 Finally, the probability of Michelle being right about the occurrence of a mega-thrust earthquake can be calculated:
+</div>
 
 ```{r}
 #p(k|D) = p(megathrust earthquake|Michelle says that there is a megathrust earthquake)
@@ -81,7 +89,9 @@ post <- likeli * prior / evid
 cat("p(k|D): ",post)
 ```
 
+<div style="text-align: justify;">
 However, we are looking for the probability of a false alarm. That is why we have to calculate the complementary probability: 
+</div>
 
 ```{r}
 post_false_alarm <- 1 - post
@@ -95,15 +105,19 @@ Don't trust Michelle!
 
 ## Shiny R Markdown Documents
 
+<div style="text-align: justify;">
 https://bookdown.org/yihui/rmarkdown/shiny-documents.html
 
 In contrast to the prior R Markdown HTML, Shiny documents are no longer static documentations. They allow that the user can change parameters of the calculation/analysis and provide a immediate output of the results. 
 
 Instead of "embed a standalone Shiny application within a document", we decided to embed "individual Shiny inputs and outputs in R Markdown".
+</div>
 
 ### Defining the Layout
 
+<div style="text-align: justify;">
 First of all, we define the layout of the Shiny App. There are different layout options. We are using the function ```sidebarLayout()``` to create an app-layout with a sidebar that contains the input controls and a larger main area that contains the outputs.
+</div>
 
 ```{r, eval = FALSE}
 sidebarLayout(
@@ -119,6 +133,7 @@ sidebarLayout(
 
 ### Selection of Parameters
 
+<div style="text-align: justify;">
 With the help of Shiny functions (?), the user can now change/select the input parameters:
 * probability of Michelle being right
 * probability of a mega-thrust earthquake
@@ -126,12 +141,13 @@ With the help of Shiny functions (?), the user can now change/select the input p
 ... and can immediately see the changes in the posterior-probability. 
 
 The user should use a ```sliderInput``` in order to change the values of the input parameters. This kind of input is advantageous since the programmer can define the minimum and maximum values as well as the steps.
-
+</div>
 
 ###Output
 
+<div style="text-align: justify;">
 It is important to use ```renderPlot``` to create [flexible graphics). 
-
+</div>
 
 ```{r}
 
@@ -164,7 +180,9 @@ sidebarLayout(
       post <- likeli * prior / evid
   
       #paste("Michelle is right with a probability of ", post, " %")
-     paste("Michelle is wrong and causes false alarm with a probability of ", (1-post), " %")
+     #paste("Michelle is wrong and causes false alarm with a probability of ", (1-post), " %")
+     postPercentage <- (1-post) * 100
+     sprintf("Michelle is wrong and causes false alarm with a probability of %.4f %%", postPercentage)
       #cat (paste (post, "\n", collapse=""))
       #format(post, digits = 2 )
      # sprintf("Michelle is right with a probability of: %.2f %%", post)
@@ -177,7 +195,8 @@ sidebarLayout(
       evid <- (likeli*prior) + ((1-likeli)*(1-prior))
       post <- likeli * prior / evid
       
-      barplot((1-post),main = "",horiz = TRUE, xlim = c(0, 1), col = c("#4286f4"), names.arg =  c("trustworthiness"))
+      postPercentage <- (1-post) * 100
+      barplot(postPercentage,main = "",horiz = TRUE, xlim = c(0, 100), col = c("#4286f4"), names.arg =  c("trustworthiness"))
 
       #barplot((1-post),main = "",horiz = TRUE, xlim = c(0, 1), col = c("#4286f4"), names.arg =  c("trustworthiness"))
   })
