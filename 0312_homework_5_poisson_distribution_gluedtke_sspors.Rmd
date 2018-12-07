@@ -1,6 +1,6 @@
 ---
 title: "Poisson Distribution"
-author: "Gwendolin Luedtke, Sina Spors"
+author: "Gwendolin LÃ¼dtke, Sina Spors"
 date: "03 December 2018"
 output:
   html_document:
@@ -31,14 +31,12 @@ In order to calculate the mean rate of events from a data set that contains the 
 
 # Data Basis
 
-Landslide data were obtained from the international disaster database (EM-DAT)[https://www.emdat.be/]. The data set includes recorded landslides that occurred in China from 1980 to 2017. The number of landslides per year is given (condition for using Poisson distribution).
+Landslide data were obtained from the international disaster database [EM-DAT](https://www.emdat.be/). The data set includes recorded landslides that occurred in China from 1980 to 2017. The number of landslides per year is given (condition for using Poisson distribution).
 
-After importing the obtained CSV-file in R by using ´´´read.csv()```, a vector containing the number of landslides per year is extracted by converting a data frame to a vector. 
-
-
+After importing the obtained CSV-file in R by using ```read.csv()```, a vector containing the number of landslides per year is extracted by converting a data frame to a vector. 
 ```{r, eval = FALSE}
 #import csv file
-dat <- read.csv("china_landslides.csv", header = TRUE, sep=";")
+dat <- read.csv("china_landslides.csv", header = TRUE, sep = ";")
 
 #select rows and col simultaneously 
 dat_ls <- dat[c(42:79),c(1,4)]
@@ -57,8 +55,7 @@ dat_ls_vector <-as.vector(dat_ls_matrix)
 landslide <- as.numeric(dat_ls_vector[39:76]) #occurence from 1980 to 2017
 
 ```
-
-```{r, echo=FALSE}
+```{r, echo = FALSE}
 landslide <- c(5,  8,  7,  9,  6, 15, 11, 16, 18, 14, 18, 13, 18, 18, 18, 15, 20, 21, 18, 21, 29, 33, 29, 27, 24,
 26, 32, 37, 20, 30, 26, 26, 20, 28, 43, 41, 36, 33, 30) 
 ```
@@ -67,19 +64,16 @@ landslide <- c(5,  8,  7,  9,  6, 15, 11, 16, 18, 14, 18, 13, 18, 18, 18, 15, 20
 # Basics Calculation
 
 Instead of using static or interactive single values, we are going to use **vectors ** to calculate the posterior-rate (Bayes' Rule).
-
  $$p(\lambda|D)=\frac{p(D|\lambda) p(\lambda)}{p(D)}$$ 
  
- with
- * D = yearly number of landslides observed in China (from 1980 to 2017)
- * $\lambda$ = means
+with:
  
-
+D = yearly number of landslides observed in China (from 1980 to 2017) and
+  
+$\lambda$ = means
+ 
 # Definition of Prior and Likelihood
-
 First of all, *Prior* is defined by choosing reasonable values. Before choosing a range of values for $\lambda$, minimum and maximum values of the obtained data are calculated.
-
-
 ```{r,}
 min <- min(landslide)
 max <- max(landslide)
@@ -88,74 +82,48 @@ max <- max(landslide)
 cat("Minimum: ", min)
 cat("Maximum: ", max)
 ```
-
-The lower limit of prior is set to *0* since years without landslides are possible. Due to the maximum  value of our data, the upper limit is set to *100*. This results in the following vector:
-
+The lower limit of prior is set to *0* since years without landslides are possible. Due to the maximum  value of our data, the upper limit is set to *100*. Therefore we need to define a variable with a range from *0* to *99*, to ensure a variable with at least 100 values. This results in the following vector:
 ```{r}
 #p(lambda)
-prior_lambda <- c(0:100)
-plot(prior_lambda, type="h")
+prior <- c(0:99) # 100 values
+plot(prior, type="h", main = "Prior", lwd = 2, col = "darkblue")
 ```
-*Gwen: kannst du herausfinden, warum der letzte Strich nicht bei 100 ist? (gilt für den oberen und unteren Plot)*
-*Gwen: könnest du auch noch alle Graphiken schöner gestalten: Beschriftung, evtl. breitere Balken, xxxx*
-*und am Ende diese Kommentare löschen? :D *
-*vielleicht hast du auch noch andere Ideen*
+
 
 We assume that these data (values for $\lambda$) are equally likely (with more information we could change the probability distribution). 
-
-So a discrete uniform probability distribution (```prior_prob```) is calculated by repeating each probability (1 divided by the total number of possible means/$\lambda$) ``length(prior_lambda)`` times (=length of the vector prior_lambda).
-*Gwen: Ist der Satz verständlich?*
+So a discrete uniform probability distribution (```posterior```) is calculated by repeating each probability.
 
 
 ```{r}
-prior_prob <- rep(1/length(prior_lambda),times = length(prior_lambda)) 
-
+posterior <- rep(1/length(prior),times = length(prior)) 
 #plot the discrete uniform probability distribution
-plot(prior_prob, type="h")
+plot(posterior, type="h", main = "Posterior", lwd = 2, col = "darkblue")
 ```
 
-In order to define the *Likelihood*, we have to multiply the Poisson distribution for each $\lambda$/mean value since we are assume that the events are independent of each other. The Poisson distribution is calculated by using the function ```dpois()```. The vector containing the yearly number of landslides as well as the prior-vector (means) are the input values.
-
-*Gwen: ??? we are using a loop (runs from minimum to maximum value of lambda, festgelegt durch seq_along).*
-*Gwen: what does the result say?*
+In order to define the *Likelihood*, we have to multiply the Poisson distribution for each $\lambda$/mean value since we assume that the events are independent of each other. The Poisson distribution is calculated by using the function ```dpois()```. The vector containing the yearly number of landslides as well as the prior-vector (means) are the input values. We use a loop where the minimum and maximum lambda values are the limits. This is determined by ```seq_along```. The diagram shows that the probability settles to a concrete value. This is caused by the poisson distribution, since the probabilities are all independent of each other. (The most likely values are striking) 
 
 ```{r}
 #p(D|k)
-
 #create a vector with the same number of entries as in "prior"
-likeli <- rep(NA,length(prior_lambda))
-
+likeli <- rep(NA,length(prior))
 #using a loop for the calculation
-for (i in seq_along(prior_lambda))
+for (i in seq_along(prior))
 {
   likeli[i] <- prod(dpois(landslide,i))
 }
-
-plot(likeli,typ="h")
-
+plot(likeli,typ="h", main = "Likelihood", lwd = 2, col = "darkblue")
 ```
 
-#Calculation of the Posterior Rate
+# Calculation of the Posterior Rate
 
-In order to calculate the **Poterior Rate** we do not have to calculate the **Evidence** but re normalize the product of Likelihood and Prior:
+In order to calculate the **Posterior rate** we do not have to calculate the **Evidence** but renormalize the product of Likelihood and Prior:
 
 
 ```{r}
-bayes_rate <- likeli * prior_prob
-
+bayes_rate <- likeli * posterior
 bayes_rate <- bayes_rate/ sum(bayes_rate)
-
-
-plot(bayes_rate, type = "h") 
-
+plot(bayes_rate, type = "h", main = "Bayes Rule", lwd = 2, col = "darkblue") 
 ```
 
-*Gwen: evtl Satz zum result > Shape is exactly the same if flat probability is used > What does we see and why?*
-....
-
-
-
-
-
-
-
+The shape of the distribution is exactly the same (see graphic likelihood) when a flat probability is used. 
+The only difference is that the probabilities in the *likelhood diagram* are much smaller. Similar to the poisson distribution, the probabilities of the bayes rule are also considered independently of each other. This implies that neither an equal distribution nor a conditional probability curve is generated.
