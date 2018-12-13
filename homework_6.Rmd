@@ -1,0 +1,146 @@
+---
+title: "Glacial Lake Outburst Floods (GLOF)"
+author: "Sina Spors, Gwendolin Lüdtke"
+date: "13 Dezember 2018"
+output: html_document
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+<div style="text-align: justify;"> 
+
+*GLOF researcher G. has compiled data on 39 outburst floods in the
+entire Himalayas in the past three decades. However, he did not find
+any evidence of GLOFs in a neighbouring mountain belt. What is
+the average annual GLOF rate there?*
+
+Up to this point, a classic R Markdown HTML document was used for documenting possible applications for the problem of learning the annual rate of GLOFs per year for an area with no observed events. Data which were used in the calculation were already provided by the programmer. Therefore, the reader could only track the different steps of calculation. Now, we go one step further and include a user input in our probability-calculation by using a Shiny document.
+
+# Review - Poisson Distribution
+
+As well as for the *Dave's telephone calls*, the **Poisson distribution** is applied 
+in order to calculate the mean rate of events from a data set that contains the number of counts of these events in a fixed time interval.
+
+## Data Basis
+
+The existing data is taken from the given situation and set as a variable. Here are the 39 outburst floods in the entire Himalayas divided by the given past 30 years. The next step is to replicate the values in the borders between 0 and 30 to give the Number of GLOFs per year in a 30-year period.
+
+```{r}
+# data on glacial lake outburst floods (GLOF)
+# 39 events in 3 decades
+glofs <- 39
+glof_rate <- 39/30
+# unknown: GLOF rate in mountain belt
+
+# Data? 
+dat <- rep(0,30)
+```
+
+## Definition of Prior, Likelihood and Posterior
+
+To define the **Prior** it is useful to choose reasonable values. After that an  *exponential distribution* helps to model the time between the occurrence of events in an interval of time, or the distance between events in space. Then the resolution of the prior must be reduced to specify this. So a *rate* of 0.5 is set. In order to determine the probability of the prior, the function ```dexp``` is used. Finally, the calculated probability is divided by the sum of the probabilities.
+
+```{r}
+# Prior on GLOF rates
+prior <- rexp(1000, rate = 0.5) 
+prior_prob <- dexp(prior, rate = 0.5)
+prior_prob <- prior_prob/sum(prior_prob)
+```
+
+In order to define the **Likelihood**, we have to multiply the Poisson distribution for each mean value since we assume that the events are independent of each other. The Poisson distribution is calculated by using the function ```dpois()```. The vector containing the yearly number of GLOFs as well as the prior-vector (means) are the input values. 
+
+```{r}
+# Likelihoood
+# create a vector with the same number of entries as in "prior"
+likeli <- rep(NA, length(prior))
+for (i in seq_along(prior)) {
+ likeli[i] <- prod(dpois(dat, prior[i]))
+}
+```
+
+In order to calculate the **Posterior rate** we do not have to calculate the **Evidence** but renormalize the product of Likelihood and Prior.
+
+```{r}
+# Posterior
+posterior <- likeli*prior_prob
+posterior <- posterior/sum(posterior)
+```
+
+## Plot
+
+```{r}
+# Plot
+par(mfrow = c(1,1))
+plot(prior,prior_prob, type = "h", xlab = "Annual rate of GLOFs", ylab = "Prior Probability", lwd = 1)
+abline(v = glof_rate, lty = 2, col = "red")
+plot(prior, likeli, type = "h", xlab = "Annual rate of GLOFs", ylab = "Likelihood", lwd = 2)
+abline(v = glof_rate, lty = 2, col = "red")
+plot(prior, posterior, type = "h", xlab = "Annual rate of GLOFs", ylab = "Posterior Probability", lwd = 2)
+abline(v = glof_rate, lty = 2, col = "red")
+```
+
+*Assume that G. is 95% certain that the average GLOF rate in any Asian mountain belt is five per year at the most. How does this affect the posterior estimate?*
+
+To be able to solve this problem, the first 3 variables are defined.
+
+$\lambda$ = rate of exponential
+
+b = border of rate
+
+p = quantity of probability
+
+```{r}
+# Prior on GLOF rates
+p <- 0.95 
+b <- 5
+```
+
+The exponential distribution with rate λ has density:
+
+p = λ $e^{- λx}$ for x ≥ 0.
+
+Subsequently, an integral calculation must be made:
+
+$$\int_0^b \lambda e^{- λx} \,dx= p$$
+
+This equation is then integrated step by step and resolved to $\lambda$.
+Since λ represents a constant in this case, this can be pulled before the integral.
+
+ $$ \lambda \int_0^b  e^{- λx} \,dx= p$$
+
+Thereafter, the integral is determined and set within the predetermined borders.
+$$\lambda[\frac{-1}\lambda] e^{- λx} = p$$
+
+$$\lambda (\frac{-1}\lambda) [e^{- λx}] = p$$
+
+$$-1 [e^{- λx}] = p$$
+
+$$-e^{- λb} - (-1) = p$$
+
+$$-e^{- λb} + 1 = p$$
+
+$$-e^{- λb} = p - 1$$
+
+$$e^{- λb} = - (p - 1)$$
+
+$$- λb = ln (1 - p)$$
+
+
+$$ λ = -\frac{ln (1 - p)}b$$
+
+With the help of the just solved equation it is now possible to create a graph based on the given variable.
+
+```{r}
+temp <- log(1-p, base = exp(1))
+lambda <- (-(temp)/(b))
+prior <- rexp(1000, rate = lambda) 
+prior_prob <- dexp(prior, rate = 1)
+prior_prob <- prior_prob/sum(prior_prob)
+plot(prior,prior_prob, type = "h", xlab = "Annual rate of GLOFs", ylab = "Prior", lwd = 1)
+```
+
+
