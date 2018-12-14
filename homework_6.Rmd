@@ -1,6 +1,6 @@
 ---
 title: "Glacial Lake Outburst Floods (GLOF)"
-author: "Sina Spors, Gwendolin Lüdtke"
+author: "Sina Spors, Gwendolin L�dtke"
 date: "13 Dezember 2018"
 output: html_document
 runtime: shiny
@@ -13,43 +13,62 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <div style="text-align: justify;"> 
 
-*GLOF researcher G. has compiled data on 39 outburst floods in the
-entire Himalayas in the past three decades. However, he did not find
-any evidence of GLOFs in a neighbouring mountain belt. What is
-the average annual GLOF rate there?*
+*GLOF researcher G. has compiled data on 39 glacier outburst floods (GLOFs) in the entire Himalayas in the past three decades. However, he did not find any evidence of GLOFs in a neighbouring mountain belt. What is the average annual GLOF rate there (annual rate of GLOFs per year for an area with no observed events). Use an exponential prior, and compute the likelihood and posterior. Make sure your exponential prior is such that a value of 5 or less is drawn with a probability of 95 %*
 
-Up to this point, a classic R Markdown HTML document was used for documenting possible applications for the problem of learning the annual rate of GLOFs per year for an area with no observed events. Data which were used in the calculation were already provided by the programmer. Therefore, the reader could only track the different steps of calculation. Now, we go one step further and include a user input in our probability-calculation by using a Shiny document.
 
-# Review - Poisson Distribution
+## Data Basis & Define Data
 
-As well as for the *Dave's telephone calls*, the **Poisson distribution** is applied 
-in order to calculate the mean rate of events from a data set that contains the number of counts of these events in a fixed time interval.
-
-## Data Basis
-
-The existing data is taken from the given situation and set as a variable. Here are the 39 outburst floods in the entire Himalayas divided by the given past 30 years. The next step is to replicate the values in the borders between 0 and 30 to give the Number of GLOFs per year in a 30-year period.
+The existing data are taken from the given situation: 39 outburst floods were observed in the entire Himalayas in the past 30 years. Therefore, the annual GLOF rate in this area can be calculated:
 
 ```{r}
 # data on glacial lake outburst floods (GLOF)
 # 39 events in 3 decades
 glofs <- 39
 glof_rate <- 39/30
+```
+
+However, we are looking for the (unknown) GLOF rate in the neighbouring montain belt. To tackle this problem, we need data for this study area. We know, that there are no evidences of GLOFs in the new study area occuring in the past 30 years. This implies that we can also create a vector with data for this mountain belt. Therefore, the next step is to replicate zero values in the borders between 0 and 30 to give the "observed" number of GLOFs per year in a 30-year period. This does not necessarily mean that the annual rate there is zero!
+
+```{r}
 # unknown: GLOF rate in mountain belt
 
-# Data? 
+# Data?
+# Create a vector with 30 zeros
 dat <- rep(0,30)
 ```
 
 ## Definition of Prior, Likelihood and Posterior
 
-To define the **Prior** it is useful to choose reasonable values. After that an  *exponential distribution* helps to model the time between the occurrence of events in an interval of time, or the distance between events in space. Then the resolution of the prior must be reduced to specify this. So a *rate* of 0.5 is set. In order to determine the probability of the prior, the function ```dexp``` is used. Finally, the calculated probability is divided by the sum of the probabilities.
+First of all, we create the Prior on GLOFs rate (or: "What do we know about the annual rate of GLOFs"). This is an important advantage of the Bayes' Rule: One can define the Prior assumption **without** having any data.
+
+The prior should capture all possible rates of values it gets (to define the **prior** it is useful to choose reasonable values.). We also know, that the shape of prior does not change much but the range. Since we are using a discrete distribution and we know that the rate in the Himalayas is 1.3, we should decimals instead of integers as well as define, that our prior believe is that in the mountain belt where were perhaps xxx to xx GLOFS per year with more likely lower values (```prior```).
+
+By using a finer prior/mesh / smaller steps (decimals instead of integers for possible rates), the more probabilities are considered for smaller rates than for higher rates (smaller rates are more likely than higher rates).
+
+In addition the thinner steps, it is also useful to use and exponential prior so that smaller rates are in favor in order to gain more information about smaller rates (which are in our case / in our prior believe more important) and save computation. A rate of 0.5 is set (Then the resolution of the prior must be reduced to specify this.).
+
+(After that an *exponential distribution* helps to model the time between the occurrence of events in an interval of time, or the distance between events in space.)
+
+In the next step, you have to give a weight to these outcomes (define ```prior_prob```). This is done by using ```rexp()``` (like ```runif()```). By using this function random number are created that are exponentially distributed, so we can sample from exponential data. Exponential distribution: Smaller values are more likely (very dense and thus nearly continuous).
+
+In order to determine the probability of the prior, the function dexp is used. Finally, the calculated probability is divided by the sum of the probabilities.
 
 ```{r}
-# Prior on GLOF rates
-prior <- rexp(1000, rate = 0.5) 
+#Prior on GLOF rates
+#prior is now exponentially distributed 
+#possible rates: 0.5, 5
+prior <- rexp(1000, rate = 0.5)
+
+#probability distribution
 prior_prob <- dexp(prior, rate = 0.5)
+
+# renormalise
 prior_prob <- prior_prob/sum(prior_prob)
 ```
+
+With data and prior (see above), we can now compute the likelihood (of having zero observations). You have to keep in mind, that GLOFs are independent.
+
+As well as for the Dave's telephone calls, the **Poisson distribution** is applied in order to calculate the mean rate of events from a data set that contains the number of counts of these events in a fixed time interval.
 
 In order to define the **Likelihood**, we have to multiply the Poisson distribution for each mean value since we assume that the events are independent of each other. The Poisson distribution is calculated by using the function ```dpois()```. The vector containing the yearly number of GLOFs as well as the prior-vector (means) are the input values. 
 
@@ -60,6 +79,7 @@ likeli <- rep(NA, length(prior))
 for (i in seq_along(prior)) {
  likeli[i] <- prod(dpois(dat, prior[i]))
 }
+# see plot: 0 has a probability of NEARLY 1
 ```
 
 In order to calculate the **Posterior rate** we do not have to calculate the **Evidence** but renormalize the product of Likelihood and Prior.
@@ -85,7 +105,9 @@ abline(v = glof_rate, lty = 2, col = "red")
 
 *Assume that G. is 95% certain that the average GLOF rate in any Asian mountain belt is five per year at the most. How does this affect the posterior estimate?*
 
-To be able to solve this problem, the first 3 variables are defined.
+Now, we have to take into account an additional contain on the prior. We should find the rate of an exponential distribution, that gives us a prior with 95 % < 5 GLOFs per year.
+
+Probability density function of an exponential distribution looks as the following:
 
 $\lambda$ = rate of exponential
 
@@ -99,38 +121,41 @@ p <- 0.95
 b <- 5
 ```
 
-The exponential distribution with rate λ has density:
+The exponential distribution with rate $\lambda$ has density:
 
-p = λ $e^{- λx}$ for x ≥ 0.
+$$p = \lambda e^{- \lambda x}$$
+$$for x \geq 0.$$
 
 Subsequently, an integral calculation must be made:
 
-$$\int_0^b \lambda e^{- λx} \,dx= p$$
+$$\int_0^b \lambda e^{- \lambda x} \,dx= p$$
 
 This equation is then integrated step by step and resolved to $\lambda$.
-Since λ represents a constant in this case, this can be pulled before the integral.
+Since $\lambda$ represents a constant in this case, this can be pulled before the integral.
 
- $$ \lambda \int_0^b  e^{- λx} \,dx= p$$
+ $$ \lambda \int_0^b  e^{- \lambda x} \,dx= p$$
 
 Thereafter, the integral is determined and set within the predetermined borders.
-$$\lambda[\frac{-1}\lambda] e^{- λx} = p$$
+$$\lambda[\frac{-1}\lambda] e^{- \lambda x} = p$$
 
-$$\lambda (\frac{-1}\lambda) [e^{- λx}] = p$$
+$$\lambda (\frac{-1}\lambda) [e^{- \lambda x}] = p$$
 
-$$-1 [e^{- λx}] = p$$
+$$-1 [e^{- \lambda x}] = p$$
+Now the lower bounds have to be subtracted from the upper ones.
 
-$$-e^{- λb} - (-1) = p$$
+$$-e^{- \lambda b} - (-1) = p$$
 
-$$-e^{- λb} + 1 = p$$
+$$-e^{- \lambda b} + 1 = p$$
 
-$$-e^{- λb} = p - 1$$
+$$-e^{- \lambda b} = p - 1$$
 
-$$e^{- λb} = - (p - 1)$$
+$$e^{- \lambda b} = - (p - 1)$$
 
-$$- λb = ln (1 - p)$$
+$$- \lambda b = ln (1 - p)$$
 
+The last step is to change the equation to $\lambda$
 
-$$ λ = -\frac{ln (1 - p)}b$$
+$$ \lambda = -\frac{ln (1 - p)}b$$
 
 With the help of the just solved equation it is now possible to create a graph based on the given variable.
 
