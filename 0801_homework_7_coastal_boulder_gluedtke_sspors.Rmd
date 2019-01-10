@@ -1,6 +1,6 @@
 ---
 title: "Bayes' Rule - Gaussian Distributed Measurements"
-author: "Gwendolin Luedtke, Sina Spors"
+author: "Gwendolin Lüdtke, Sina Spors"
 date: "08 January 2019"
 output:
   html_document:
@@ -23,7 +23,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-*A group of geoscience students use a tape to measure the long axis of a coral boulder stranded on a sandy beach. The students have collected n data points of the axis diameter x. We know that the tape measure is only accurate to a certain point, and assume, for the sake of simplicity, that all measurements come from the same Gaussian distribution. We express the spread of measurements with the distribution's variance $\sigma^2$ (Gaussian distributed measurements with a fixed variance).Given n measurements, what is the boulder's most believable actual size?*
+*A group of geoscience students use a tape to measure the long axis of a coral boulder stranded on a sandy beach. The students have collected 'n' data points of the axis diameter 'x'. We know that the tape measure is only accurate to a certain point, and assume, for the sake of simplicity, that all measurements come from the same Gaussian distribution. We express the spread of measurements with the distribution's variance $\sigma^2$ (Gaussian distributed measurements with a fixed variance). Given n measurements, what is the boulder's most believable actual size?*
 
 
 In order to calculate the boulder's most believable actual size and to check how accurately we can recover the true mean from this sample, the **Bayes' Rule** is applied in combination with the **Gaussian or Normal distribution**.
@@ -42,7 +42,7 @@ Moreover, the variance $\sigma^2$ (known variance of Gaussian noise, accuracy of
 sig <- 0.1
 ```
 
-In the next step, ```n``` random data points ("measurements of the boulder diameter)") are created from this Gaussian distribution with the mean $\mu$ (= 5.2) and variance $\sigma$ (= 0.1) by using```rnorm()```. For this function, the standard deviation $\sigma$ instead of the variance $\sigma^2$ must be used. 
+In the next step, ```n``` random data points ("measurements of the boulder diameter") are created from this Gaussian distribution with the mean $\mu$ (= 5.2) and variance $\sigma$ (= 0.1) by using ```rnorm()```. For this function, the standard deviation $\sigma$ instead of the variance $\sigma^2$ must be used. 
 
 
 ```{r}
@@ -54,19 +54,19 @@ hist(dat) # ten measurements of the students
 
 # Applying Bayes' Rule
 
-From this data, we woult like to recreate the most credible mean.Here, the Bayes' Rule comes on. In order to calculate the posterior (** that is the xxx?**), we have to define the prior and the likelihood.
+From this data, we would like to recreate the most credible mean. The Bayes' Rule is used for that. In order to calculate the posterior (** that is the xxx?**), we have to define the prior and the likelihood.
 
 ## Definition of Prior
 
-First of all, the prior (initial belief about the mean) hast to be specified, based on **"what we believe to be realistic for the (maximum) boulder diameter"**. The prior should come from prior knowledge (previous data) or another study but not from our data!. Based on **previous knowledge we set our prior believes of the mean (potential means) from 3.5 to 6 m**.
+First of all, the prior (initial belief about the mean) has to be specified, based on **"what we believe to be realistic for the (maximum) boulder diameter"**. The prior should come from prior knowledge (previous data) or another study but not from our data! Based on **previous knowledge we set our prior believes of the mean (potential means) from 3.5m to 6m**.
 
 ```{r}
 #set range of prior values
 prior_mu <- seq(3.5, 6, 0.1)
 ```
 
-**"We now assign weights to each of these values, reflecting our initial belief about each candidate value. In the simplest of cases, we could assign uniform weights to each of the 26 candidate means. This is also known as an uninformed prior. To demonstrate the power of Bayes' Rule, we choose instead random weights using the runif() command. Obviously this random assignment of weights hardly reflects any prior or expert knowledge and thus should be avoided otherwise:"**.
-
+Now each of these values is assigned a weighting, reflecting our initial belief about each candidate score. Assigning uniform weights to each of the 26 candidate agents is referred to as an unaware predecessor.
+That would be the easiest way. Instead, random weights are chosen to illustrate what influence the Bayes' Rule may have. This is guaranteed with the command ```runif()```. BUT, in general, this should be avoided by randomizing the weighting, as this obviously reflects any prior or expert knowledge.
 
 ```{r}
 #creation of random weights
@@ -81,11 +81,11 @@ plot(p_mu ~ prior_mu, type ="h") #plot(x,y) or plot(y~x)
 
 ```
 
-**Plot entspricht dem previous knowledge. Discre uniform probability distribution?**.
+**Plot corresponds to the previous knowledge. Discrete uniform probability distribution?**
 
 ## Definition of Likelihood
 
-Now, we have to compute the likelihood of seeing these n measurements. The probability density **(Gaussian probability distribution)** **of each xxx** is calculated by using ```dnorm()``` that needs the mean as well as the standard deviation of the Gaussian distribution defined before and out data ```dat``` as input values.The **probability densities or normal distribution for each ```prior_mu``` have to be multiplied since we assume independence of each data point. While the data as well as the standard deviation remain constant, the mean must be changes according to ```prior_mu```. Therefore, we are using a loop (**for all canditate values of $\mu$**) so that the calculate the likelihood for each of these candidate values of $\mu$.
+Now, we have to compute the likelihood of seeing these 'n' measurements. The probability density **(Gaussian probability distribution)** is calculated by using ```dnorm()```. That needs the mean as well as the standard deviation of the Gaussian distribution defined before and out data ```dat``` as input values.The probability densities or normal distribution for each ```prior_mu``` have to be multiplied since we assume independence of each data point. While the data as well as the standard deviation remain constant, the mean must be changes according to ```prior_mu```. Therefore, we are using a loop (*for all canditate values of $\mu$*) so that the calculate the likelihood for each of these candidate values of $\mu$.
 
 
 ```{r}
@@ -95,7 +95,7 @@ likeli <- rep(NA, length(prior_mu))
 #using a loop for the calculation
 for (i in seq_along(prior_mu))
                     {
-                      likeli[i] <- prod(dnorm(dat, mean = i , sd = sqrt(sig)))
+                      likeli[i] <- prod(dnorm(dat, mean = prior_mu[i] , sd = sqrt(sig)))
                     }
 
 ```
