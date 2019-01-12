@@ -31,14 +31,14 @@ In order to calculate the boulder's most believable actual size and to check how
 
 We already know we true mean:
 ```{r}
-#true mean of the boulder axis diameter
+# true mean of the boulder axis diameter
 mu <- 5.2
 ```
 
 Moreover, the variance $\sigma^2$ (= accuracy of the tape measure) is known:
 
 ```{r}
-#variance
+# variance
 sig <- 0.1
 ```
 
@@ -46,11 +46,13 @@ In the next step, ```n``` random data points are created from this Gaussian dist
 
 
 ```{r}
-#measurements of the boulder diameter
+# measurements of the boulder diameter
 n <- 10
 dat <- rnorm (n, mu, sqrt(sig))
 
-hist(dat) # ten measurements of the students
+hist(dat,
+     main = "Measurements of the boulder diameter",
+     xlab = "Diameter of the coral boulder's long axis") # ten measurements of the students
 ```
 
 # Applying Bayes' Rule
@@ -62,8 +64,8 @@ These data serve as a basis for recreating the most credible mean boulder diamet
 First of all, the prior (initial belief about the range of mean boulder diameter) has to be specified. The prior should come from prior knowledge (previous data) or another study but not from our data! Based on previous knowledge, values between 3.5 and 6 m were chosen.
 
 ```{r}
-#prior belief
-#range of mean boulder diameter
+# prior belief
+# range of mean boulder diameter
 prior_mu <- seq(3.5, 6, 0.1)
 ```
 
@@ -71,17 +73,17 @@ Now each of these values is assigned a weighting, reflecting our initial belief 
 That would be the easiest way. Instead, random weights are chosen to illustrate what influence the Bayes' Rule may have. This is guaranteed with the command ```runif()```. BUT, in general, this should be avoided by randomizing the weighting, as this obviously reflects any prior or expert knowledge.
 
 ```{r}
-#creation of random weights
+# creation of random weights
 weights_mu <- runif (length(prior_mu))
 
 
-#renormalise so that all probability masses add up to unity
-#prior probability
+# renormalise so that all probability masses add up to unity
+# prior probability
 p_mu <- weights_mu/sum(weights_mu)
 
-#plot of probability density function
+# plot of probability density function
 plot(p_mu ~ prior_mu, type ="h", 
-      xlab = "prior belief", ylab = "prior probability")
+      xlab = "Prior belief", ylab = "Prior probability")
 ```
 
 ## Definition of Likelihood
@@ -90,23 +92,23 @@ Now, we have to compute the likelihood of seeing these 'n' measurements. The Gau
 
 
 ```{r}
-#create a vector with the same number of entries as in "prior"
+# create a vector with the same number of entries as in "prior"
 likeli <- rep(NA, length(prior_mu))
 
-#using a loop for the calculation
+# using a loop for the calculation
 for (i in seq_along(prior_mu))
                     {
                       likeli[i] <- prod(dnorm(dat, mean = prior_mu[i] , sd = sqrt(sig)))
                     }
-#plot likelihood
-plot(likeli~ prior_mu,typ="h", 
-      xlab = "prior belief", ylab = "likelihood")
+# plot likelihood
+plot(likeli~ prior_mu,typ="h",  
+      xlab = "Prior belief", ylab = "Likelihood")
 ```
 
 
 ## Posterior
 
-Finally, we multiply prior and likelihood and re normalize in order to calculate the posterior. 
+Finally, we multiply prior and likelihood and renormalize in order to calculate the posterior. 
 
 
 ```{r}
@@ -114,14 +116,14 @@ posterior <- likeli * p_mu
 
 posterior <- posterior / sum(posterior)
 
-#plot posterior
-plot(posterior~ prior_mu, type = "h",
-     xlab = "prior belief", ylab = "posterior") 
-abline(v = 5.2, lty = 2, lwd = 2)
-#legend(3.5, 0.4, legend=c("", "given mean"),
-      # col=c("black", "black"), lty=0:2, cex=0.8)
+# plot posterior
+plot(posterior~ prior_mu, type = "h", 
+     xlab = "Prior belief", ylab = "Posterior") 
+abline(v = 5.2, lty = 2, lwd = 2, col = "red")
+legend(3.5, 0.4, legend=c("", "given mean"),
+       col=c("red", "red"), lty=0:2, cex=0.8)
 
-#maximum posterior
+# maximum posterior
 max <- prior_mu[which (posterior == max(posterior))]
 print(max, digits=2)
 ```
