@@ -42,7 +42,7 @@ Moreover, the variance $\sigma^2$ (= accuracy of the tape measure) is known:
 sig <- 0.1
 ```
 
-In the next step, ```n``` random data points are created from this Gaussian distribution with the mean $\mu$ (= 5.2) and variance $\sigma$ (= 0.1) by using ```rnorm()```. For this function, the standard deviation $\sigma$ instead of the variance $\sigma^2$ must be used. 
+In the next step, ```n``` random data points are created from this Gaussian distribution with the mean $\mu$ (= 5.2) and variance $\sigma^2$ (= 0.1) by using ```rnorm()```. For this function, the standard deviation $\sigma$ instead of the variance $\sigma^2$ must be used. 
 
 
 ```{r}
@@ -88,7 +88,7 @@ plot(p_mu ~ prior_mu, type ="h",
 
 ## Definition of Likelihood
 
-Now, we have to compute the likelihood of seeing these 'n' measurements. The Gaussian probability density **of each measurement** is calculated by using ```dnorm()```. The mean (prior believes) as well as the standard deviation of the Gaussian distribution defined before and our created data points ```dat``` as input values.**While the data as well as the standard deviation remain constant, the mean must be changes according to ```prior_mu```. The probability densities or normal distribution for each ```prior_mu``` have to be multiplied since we assume independence of each data point**. 
+Now, we have to compute the likelihood of seeing these 'n' measurements. The Gaussian probability density of each measurement is calculated by using ```dnorm()```. The mean (prior believes) as well as the standard deviation of the Gaussian distribution defined before and our created data points ```dat``` as input values.While the data as well as the standard deviation remain constant, the mean must be changes according to ```prior_mu```. The probability densities or normal distribution for each ```prior_mu``` have to be multiplied since we assume independence of each data point. 
 
 
 ```{r}
@@ -125,10 +125,10 @@ legend(3.5, 0.4, legend=c("", "given mean"),
 
 # maximum posterior
 max <- prior_mu[which (posterior == max(posterior))]
-print(max, digits=2)
+print(max)
 ```
 
-Results show that the calculated most believable mean is close to / equal to the given mean.
+Results show that the calculated most believable mean is close to the given mean.
 
 
 
