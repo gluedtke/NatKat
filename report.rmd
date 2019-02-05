@@ -1,0 +1,81 @@
+---
+title: "Applying Bayes’ Rule to Natural Hazards, Risks, and Disasters"
+author: "Sina Spors, Gwendolin Lüdtke"
+date: "5. Februar 2019"
+output:
+  html_document:
+    highlight: textmate
+    code_folding: show
+    theme: spacelab #cerulean, journal, flatly, darkly, readable, spacelab, united, cosmo, lumen, paper, sandstone,                       simplex, and yet
+    toc: true #add table of contents, possible to modify toc_depth: 1-3
+    toc_float: #floating table of contents will always be visible even when the document is scrolled
+      collapsed: false #controls whether the TOC appears with only the top-level (e.g., H2) headers. If collapsed                            initially, the TOC is automatically expanded inline when necessary
+      smooth_scroll: true #controls whether page scrolls are animated when TOC items are navigated to via mouse                                 clicks
+      
+#Alternative: html_notebook
+---
+
+<style>
+body {
+text-align: justify} 
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Basics
+
+Natural hazards are severe and extreme weather and climate events that occur naturally in all parts of the world, although some regions are more vulnerable to certain hazards than others. Statistically, natural hazards can be described as a probability (or frequency) of the natural process per year. Vulnerability can be explained as a percentage loss of value. The loss can be in different areas auch as socioeconomic, political, structural or ecological. Risks arise from the overlapping of danger and vulnerability. In general, the hazard can be described by the intensity and probability of extreme events. Statistically risk can be describes as the annual expected loss in terms of financial resources.
+
+## Bayesian Rule and its variables
+
+In order to be able to quantify all these values, the so-called **Bayes' Rule** is appropriate. It was developed by the english mathematician Thomas Bayes and describes a probabilistic theory that deals with the calculation of conditional probabilities. The Bayes Rule extends the original assumption by constantly recording new data and observations. Probability is a measure of subjective uncertainty. Mathematically, the Bayes Rule can be described as follows:
+
+$$P(A|B)=\frac{P(B|A)*P(A)}{P(B)}$$
+
+B discribes the given data that we observed and A are the things we wish to learn from it. 
+In order to work actively with this probabilistic theory, certain parameters must first be determined. The three parameters in focus are likelihood, prior, and posterior. The Bayes Rule can also written in words: 
+
+$$Posterior=\frac{Likelihood*Prior}{Evidence}$$
+
+**Likelihood** discribes a function that depends on the model setup (parameters) given that we observe data. Prior and Posterior are always distributions. 
+
+**Prior** is a probability distribution that would express one's beliefs about this quantity before some evidence is taken into account. 
+
+In Bayesian statistic the **posterior** is a conditional probability. After the relevant evidence or background is taken into account the prior is refered. Depending on evidence obtained through an experiment or survey, the probability distribution of an unknown quantity may be considered as a random variable.
+
+## 20 Studies
+
+In order to understand the definition and context of the variables just given, 20 self-selected studies have been prepared. For this purpose, a table with phenomena (natural hazard), likelihood, prior and references was created.
+
+Number|Phenomena|Likelihood|Prior|References|
+|:-:|:-:|:-:|:-:|:-:|
+|1|x|x|x|x|
+|2|x|x|x|x|
+|3|x|x|x|x|
+|4|x|x|x|x|
+|5|x|x|x|x|
+|6|x|x|x|x|
+|7|x|x|x|x|
+|8|x|x|x|x|
+|9|x|x|x|x|
+|10|x|x|x|x|
+|11|x|x|x|x|
+|12|x|x|x|x|
+|13|x|x|x|x|
+|14|x|x|x|x|
+|15|x|x|x|x|
+|16|x|x|x|x|
+|17|x|x|x|x|
+|18|x|x|x|x|
+|19|x|x|x|x|
+|20|x|x|x|x|
+
+In this simple exercise, it becomes clear that the prior can assume different distributions. But for the introduction into the chosen topic, this serves for a better understanding. 
+
+## Examples
+
+
+
+
