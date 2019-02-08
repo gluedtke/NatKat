@@ -1,7 +1,7 @@
 ---
 title: "Applying Bayes’ Rule to Natural Hazards, Risks, and Disasters"
 author: "Sina Spors, Gwendolin Lüdtke"
-date: "5. Februar 2019"
+date: "18. February 2019"
 output:
   html_document:
     highlight: textmate
@@ -76,6 +76,97 @@ In this simple exercise, it becomes clear that the prior can assume different di
 
 ## Examples
 
+In order to understand the procedure and the various ways of using the Bayes Rule, three examples are presented in the following section. These deal with three different distribution always with reference to the Bayes Rule. The given data can be both invented and scientifically proven.
+
+### Poisson Distribution
+
+For the following example of a Poisson Distribution in connection with the Bayes Rule, the theme of the tropical cyclones is used. As there has been an increasing number of publications in recent years, focusing on the topic of tropical cyclones. In particular, the thesis was discussed as to whether these have increased in frequency and strength over the course of time.
+
+In order to calculate the mean rate of events from a data set that contains the number of counts of these events in a fixed time interval you have to use the Poisson distribution in combination with the Bayes’ Rule. The Poisson distribution is a discrete probability distribution that is used for the calculation of the probability of a given number of events in a specified interval (known expectation rate) assuming that these events are independent. (The values in this example are not based on scientific findings and are therefore fictitious)
+
+To calculate the posterior rate (bayes rule) vectors are used instead of static or interactive individual values. For this purpose, the already known equation of the Bayes Rule is used and the various parameters are defined:
+
+$$p(\lambda|D)=\frac{p(D|\lambda) p(\lambda)}{p(D)}$$
+with:
+ 
+* D = yearly number of tropical cyclones
+  
+* $\lambda$ = means
+ 
+First, we need to define the prior input, that is, the number of tropical cyclones that have occurred in the northern Atlantic area over the last 10 years. Thus, the minimum and maximum annual tropical cyclones are determined
+
+```{r}
+cyclones <- c(9, 13, 8, 3, 10, 6, 13, 15, 16, 14)
 
 
+min <- min(cyclones)
+max <- max(cyclones)
+```
+```{r, echo = FALSE}
+cat("Minimum: ", min)
+cat("Maximum: ", max)
+```
+
+The next step is to define a range for the rate. The lower limit of prior is set to 0 since years without tropical cyclones are possible. Due to the maximum  value of our data, the upper limit is set to 80. Therefore we need to define a variable with a range from 0 to 80, to ensure a variable with at least 80 values. This results in the following vector: 
+
+```{r}
+prior <- 0:79 # define 80 values
+
+plot(prior, type = "h",
+     main = "Annual Number of Tropical Cyclones",
+     xlab = "Index",
+     ylab = "Prior",
+     lwd = 2)
+```
+
+It is assumed that the values for $\lambda$ are all equally probable. Thus it is possible to calculate a discrete uniform probability distribution (Prior). For this, the probabilities are considered and repeated independently.
+
+```{r}
+prior_prob <- rep(1/length(prior),times = length(prior)) 
+
+# plot the discrete uniform probability distribution
+plot(prior_prob, type="h", 
+     main = "Prior", 
+     xlab ="Annual rate of tropical cyclones", 
+     ylab = "Probability of occurring a tropical cyclone", 
+     lwd = 2)
+```
+
+In the following step, the Poisson Distribution is now multiplied for each $\lambda$ mean to define the likelihood. It should be noted that the events are all independent of each other. The Poisson distribution is calculated by using the function ```dpois()```. The vector containing the yearly number of tropical cyclones as well as the prior-vector (means) are the input values. We use a loop where the minimum and maximum lambda values are the limits. This is determined by ```seq_along```. The diagram shows that the probability settles to a concrete value. This is caused by the Poisson Distribution since the probabilities are all independent of each other. (The most likely values are striking)
+
+```{r}
+#p(D|lambda) = Likelihood
+#create a vector with the same number of entries as in "prior"
+likeli <- rep(NA,length(prior))
+
+#using a loop for the calculation
+for (i in seq_along(prior))
+{
+  likeli[i] <- prod(dpois(cyclones,i))
+}
+
+plot(likeli,type ="h", 
+     main = "Likelihood", 
+     xlab ="Annual number of tropical cyclones", 
+     ylab = "Likelihood", 
+     lwd = 2)
+```
+
+In order to calculate the Posterior rate, according to the Bayes theorem, it is necessary to multiply the likelihood with the prior and divide the result by the evidence. The evidence can be expressed by the sum of all possible outcomes (renormalization).
+
+```{r}
+# Posterior
+bayes_rate <- likeli * prior_prob
+bayes_rate <- bayes_rate/ sum(bayes_rate)
+
+plot(bayes_rate, type = "h", 
+     main = "Posterior", 
+     xlab ="Annual number of tropical cyclones", 
+     ylab = "Posterior", 
+     lwd = 2)
+abline(v = 11, lty = 2, lwd = 2, col = "red")
+legend(60, 0.2, legend=c("most likely rate"),
+       col=c("red"), lty=2, lwd = 1, cex=0.8)
+which(c(bayes_rate) == max (bayes_rate))
+```
 
