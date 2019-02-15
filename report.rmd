@@ -224,8 +224,8 @@ Min, Hense and Kwon (2004) perform a Bayesian assessment of regional-scale clima
 *A Bayesian approach to detecting change points in climatic records*:
 Ruggieri (2013) developed a Bayesian Change Point algorithm that is used for the identification of change points in climatic records, but more important the Bayesian approach to the change point problem provides a estimation of uncertainties (location and number of change points) [compared to other methods/frequentist approaches which return a single value]. Applying this approach to NOAA/NCDC annual global surface temperature anomalies time series and much longer δ^18^O proxy records of the Plio-Pleistocene, most likely three and seven change points are identified in the NOAA record and proxy record, respectively.
 
-*Greenhouse-gas emission targets for limiting global warming to 26 °C*:
-Meinshausen et al. (2009) aimed for quantify the greenhouse gas emissions for the period 2000 to 2050 that for a global warming limit of 26 °C. They chose a Bayesian approach for climate sensitivity. The “probability of exceeding 26 °C can be limited to below 25 % by CO<sub>2</sub> emission below 1000 [Einheit].
+*Greenhouse-gas emission targets for limiting global warming to 2 °C*:
+Meinshausen et al. (2009) aimed for quantify the greenhouse gas emissions for the period 2000 to 2050 that for a global warming limit of 2 °C. They chose a Bayesian approach for climate sensitivity. The “probability of exceeding 2 °C can be limited to below 25 % by CO<sub>2</sub> emission below 1000 [Einheit].
 
 *Volcanic Hazard Assessment Incorporating Expert Knowledge: Application to the Yucca Mountain Region, Nevada, USA*: Ho and Smith deal with the statistical modeling in volcanic hazard assessment for the Yucca Mountain site. Fundamentally, estimated risk values are significantly higher than those determined based on expert-driven priorities.
 
@@ -550,51 +550,53 @@ Of course, these just mentioned advantages are also critical points. Of course, 
 ## **6. References**
 
 
-BERTI, M. et al. 2012. Probabilistic rainfall thresholds for landslide occurrence using a Bayesian approach. Journal of Geophysical Research: Earth Surface, 117. Jg., Nr. F4.
+ALBERT, Jim, 1995. *Teaching Inference about Proportions Using Bayes and Discrete Models*. Journal of Statistics Education [Zugriff am 15.02.2019]. DOI: 10.1080/10691898.1995.11910494 
 
-BULMER, Michael, G, 1979. Principles of Statistics. 1. edition. Chelmsford (Massachusetts): Courier Corporation . ISBN 978-0-486-63760-0 
+BERTI, M. et al. 2012. *Probabilistic rainfall thresholds for landslide occurrence using a Bayesian approach*. Journal of Geophysical Research: Earth Surface, 117. Jg., Nr. F4.
 
-CENTRE FOR RESEARCH ON THE EPIDEMIOLOGY OF DISASTERS – CRED, 2009. Titel [online]. Centre for Research on the Epidemiology of Disasters – CRED, [Zugriff am 05.02.2019]. Verfügbarkeit unter: DOMAIN
+BULMER, Michael, G, 1979. *Principles of Statistics. 1. edition*. Chelmsford (Massachusetts): Courier Corporation . ISBN 978-0-486-63760-0 
 
-CHENG, Vincent YS, et al. 2013. Probability of tornado occurrence across Canada. Journal of Climate, 26. Jg., Nr. 23, S. 9415-9428.
+CENTRE FOR RESEARCH ON THE EPIDEMIOLOGY OF DISASTERS – CRED, 2009. **Titel** [online]. Centre for Research on the Epidemiology of Disasters – CRED, [Zugriff am 05.02.2019]. Verfügbarkeit unter: DOMAIN
 
-COLES, Stuart; TAWN, Jonathan., 2005. Bayesian modelling of extreme surges on the UK east coast. Philosophical Transactions of the Royal Society of London A: Mathematical, Physical and Engineering Sciences, 363. Jg., Nr. 1831, S. 1387-1406.
+CHENG, Vincent YS, et al. 2013. *Probability of tornado occurrence across Canada*. Journal of Climate, 26. Jg., Nr. 23, S. 9415-9428.
 
-ELSNER, James B., JAGGER, Thomas H., 2004. A  hierarchical Bayesian approach to seasonal hurricane modeling. Journal of Climate, 17. Jg., Nr. 14, S. 2813-2827.
+COLES, Stuart; TAWN, Jonathan., 2005. *Bayesian modelling of extreme surges on the UK east coast*. Philosophical Transactions of the Royal Society of London A: Mathematical, Physical and Engineering Sciences, 363. Jg., Nr. 1831, S. 1387-1406.
 
-FERRAES, Sergio G., 1985. The Bayesian probabilistic prediction of strong earthquakes in the Hellenic arc. Tectonophysics, 111. Jg., Nr. 3-4, S. 339-354.
+ELSNER, James B., JAGGER, Thomas H., 2004. *A  hierarchical Bayesian approach to seasonal hurricane modeling*. Journal of Climate, 17. Jg., Nr. 14, S. 2813-2827.
 
-GREEN, Rebecca M., et al., 2016. Estimation of tephra volumes from sparse and incompletely observed deposit thicknesses. Bulletin of Volcanology, 78. Jg., Nr. 4, S. 25.
+FERRAES, Sergio G., 1985. *The Bayesian probabilistic prediction of strong earthquakes in the Hellenic arc*. Tectonophysics, 111. Jg., Nr. 3-4, S. 339-354.
 
-HO, Chih-Hsiang, SMITH, Eugene I., 1997. Volcanic hazard assessment incorporating expert knowledge: application to the Yucca Mountain region, Nevada, USA. Mathematical geology, 29. Jg., Nr. 5, S. 615-627.
+GREEN, Rebecca M., et al., 2016. *Estimation of tephra volumes from sparse and incompletely observed deposit thicknesses*. Bulletin of Volcanology, 78. Jg., Nr. 4, S. 25.
 
-International Journal of Climatology, 2013. Bayesian approach to detecting change points in climatic records. 33. Jg., Nr. 2, S. 520-528.
+HO, Chih-Hsiang, SMITH, Eugene I., 1997. *Volcanic hazard assessment incorporating expert knowledge: application to the Yucca Mountain region, Nevada, USA*. Mathematical geology, 29. Jg., Nr. 5, S. 615-627.
 
-JHA, Abhas K., 2010. Safer Homes, Stronger Communities: A Handbook for Reconstructing after Natural Disasters. 1. edition. Washington DC: World Bank Publications. ISBN 978-0-821-38268-4 
+International Journal of Climatology, 2013. *Bayesian approach to detecting change points in climatic records*. 33. Jg., Nr. 2, S. 520-528.
 
-KRUSCHKE, John, 2010. Doing Bayesian Data Analysis: A Tutorial Introduction with R. 1. edition. Oxford: Academic Press. ISBN 978-0-123-81486-9 
+JHA, Abhas K., 2010. *Safer Homes, Stronger Communities: A Handbook for Reconstructing after Natural Disasters*. 1. edition. Washington DC: World Bank Publications. ISBN 978-0-821-38268-4 
 
-LOPEZ, Ana, et al. 2006. Two approaches to quantifying uncertainty in global temperature changes. Journal of Climate, 19. Jg., Nr. 19, S. 4785-4796.
+KRUSCHKE, John, 2010. *Doing Bayesian Data Analysis: A Tutorial Introduction with R*. 1. edition. Oxford: Academic Press. ISBN 978-0-123-81486-9 
 
-MANNING, Christopher D. & SCHÜTZE, Hinrich, 1999. Foundations of Statistical Natural Language Processing. 1. edition. London: MIT Press . ISBN  978-0-262-13360-9 
+LOPEZ, Ana, et al. 2006. *Two approaches to quantifying uncertainty in global temperature changes*. Journal of Climate, 19. Jg., Nr. 19, S. 4785-4796.
 
-MARZOCCHI, W.; SANDRI, L.; FURLAN, C., 2006. A quantitative model for volcanic hazard assessment.
+MANNING, Christopher D. & SCHÜTZE, Hinrich, 1999. *Foundations of Statistical Natural Language Processing*. 1. edition. London: MIT Press . ISBN  978-0-262-13360-9 
 
-MEINSHAUSEN, Malte, et al., 2009.Greenhouse-gas emission targets for limiting global warming to 2 C. Nature, 458. Jg., Nr. 7242, S. 1158.
+MARZOCCHI, W.; SANDRI, L.; FURLAN, C., 2006. *A quantitative model for volcanic hazard assessment*.
 
-MIN, Seung‐Ki; HENSE, Andreas; KWON, Won‐Tae, 2005. Regional‐scale climate change detection using a Bayesian decision method. Geophysical research letters, 32. Jg., Nr. 3.
+MEINSHAUSEN, Malte, et al., 2009. *Greenhouse-gas emission targets for limiting global warming to 2 °C*. Nature, 458. Jg., Nr. 7242, S. 1158.
 
-OLIVER, Willard M., MARION, Nancy E. und HILL, Joshua B., 2014. Introduction to Homeland Security: Policy, Organization, and Administration. 1. edition. Burlington (Massachusetts): Jones & Bartlett. ISBN 978-1-449-64545-8 
+MIN, Seung‐Ki; HENSE, Andreas; KWON, Won‐Tae, 2005.* Regional‐scale climate change detection using a Bayesian decision method*. Geophysical research letters, 32. Jg., Nr. 3.
 
-PERUGGIA, Mario; SANTNER, Thomas., 1996. Bayesian analysis of time evolution of earthquakes. Journal of the American Statistical Association, 91. Jg., Nr. 435, S. 1209-1218.
+OLIVER, Willard M., MARION, Nancy E. und HILL, Joshua B., 2014. *Introduction to Homeland Security: Policy, Organization, and Administration*. 1. edition. Burlington (Massachusetts): Jones & Bartlett. ISBN 978-1-449-64545-8 
 
-RAHMSTORF, Stefan et al., 2018. Are tropical cyclones getting wetter and stronger? [online]. Climate and Capitalism, [Zugriff am 15.02.2019]. Verfügbar unter: [www.climateandcapitalism.com](https://climateandcapitalism.com/2018/05/30/are-tropical-cyclones-getting-wetter-and-stronger/)
+PERUGGIA, Mario; SANTNER, Thomas., 1996. *Bayesian analysis of time evolution of earthquakes*. Journal of the American Statistical Association, 91. Jg., Nr. 435, S. 1209-1218.
 
-ROSSANO, S., et al., 1996. Computer simulation of pyroclastic flow movement: an inverse approach. Geophysical research letters, 23. Jg., Nr. 25, S. 3779-3782.
+RAHMSTORF, Stefan et al., 2018. *Are tropical cyclones getting wetter and stronger?* [online]. Climate and Capitalism, [Zugriff am 15.02.2019]. Verfügbar unter: [www.climateandcapitalism.com](https://climateandcapitalism.com/2018/05/30/are-tropical-cyclones-getting-wetter-and-stronger/)
 
-STONE, James V., 2013. Bayes' Rule: A Tutorial Introduction to Bayesian Analysis. 1. edition. Oxford: Sebtel Press. ISBN 978-0-956-37284-0 
+ROSSANO, S., et al., 1996. *Computer simulation of pyroclastic flow movement: an inverse approach*. Geophysical research letters, 23. Jg., Nr. 25, S. 3779-3782.
 
-WERNER, Angelika; HOLBROOK, Neil J., 2011. A. Bayesian forecast model of Australian region tropical cyclone formation. Journal of Climate,  24. Jg., Nr. 23, S. 6114-6131.
+STONE, James V., 2013. *Bayes' Rule: A Tutorial Introduction to Bayesian Analysis*. 1. edition. Oxford: Sebtel Press. ISBN 978-0-956-37284-0 
+
+WERNER, Angelika; HOLBROOK, Neil J., 2011. A. *Bayesian forecast model of Australian region tropical cyclone formation*. Journal of Climate,  24. Jg., Nr. 23, S. 6114-6131.
 
 
 
