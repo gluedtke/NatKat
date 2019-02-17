@@ -39,15 +39,23 @@ htmltools::img(src = knitr::image_uri(file.path(R.home("doc"), "html", "logo.jpg
 
 ## **Table of Contents**
 
-1. Introduction
-2. Bayesian Rule and its Parameters
-3. Review of the Application of Bayes' Rule in Hazard Assessment
-4. Examples of Applying Bayes' Rule to Natural Hazards, Risk and Disasters
-  * 4.1. Expectation Rates of Tropical Cyclones
-  * 4.2. Learning from Mapped Landslide Areas
-  * 4.3. Damages from Natural Disasters
-5. Conclusion
-6. References
+1. [Introduction](#introduction)
+
+2. [Bayesian Rule and its Parameters](#bayesian-rule-and-its-parameters)
+
+3. [Review of the Application of Bayes' Rule in Hazard Assessment](#review-of-the-application-of-bayes-rule-in-hazard-assessment)
+
+4. [Examples of Applying Bayes' Rule to Natural Hazards, Risk and Disasters](#examples-of-applying-bayes-rule-to-natural-hazards-risk-and-disasters)
+
+    4.1 [Expectation Rates of Tropical Cyclones](#expectation-rates-of-tropical-cyclones)
+  
+    4.2 [Learning from Mapped Landslide Areas](#learning-from-mapped-landslide-areas)
+  
+    4.3 [Damages from Natural Disasters](#damages-from-natural-disasters)
+  
+5. [Conclusion](#conclusion)
+
+6. [References](#references)
 
 ***
 
@@ -65,7 +73,7 @@ This report will concentrate on the underlying Bayes' Rule that serves as a basi
 
 ## **2. Bayesian Rule and its Parameters**
 
-For the majority of applications in scientific issues, a point estimate used in classical statistics is entirely sufficient (e.g., sample mean, standard deviation) (Bulmer 1979: 188). However, in the field of natural hazards (where you have to take sensible precaution for protection of humans live and properties), such point estimates are not sufficient enough since you have no idea about how good or bad these estimates are. That's why, a distribution of values instead of a single point value should be used in natural hazard analysis in order to consider the uncertainties.
+For the majority of applications in scientific issues, a point estimate used in classical statistics is entirely sufficient (e.g., sample mean, standard deviation) (Bulmer 1979: 188). However, in the field of natural hazards (where you have to take sensible precaution for protection of humans life and properties), such point estimates are not sufficient enough since you have no idea about how good or bad these estimates are. That's why, a distribution of values instead of a single point value should be used in natural hazard analysis in order to consider the uncertainties.
 In order to express, visualize and communicate such uncertainties, the so-called **Bayes' Rule** is often used. It was developed by the English mathematician Thomas Bayes and it is a probabilistic approach that deals with the calculation of conditional probabilities (Stone 2013: 1).  
 
 You can think of Bayes' Rule in terms of taking an initial assumption about a hypothesis or parameter, updating this initial belief by new obtained data and thus, learning from these data (Kruschke 2010: 53 ff.). 
@@ -160,9 +168,9 @@ tableData <- data.frame(
     "normal",
     "Poisson",
     "log-likelihood ",
-    "binomial",
+    "Bernoulli trial scheme",
     "Gumbel",
-    " ",
+    "log-likelihood",
     "Poisson",
     "normal"
    ),
@@ -256,7 +264,7 @@ Ho and Smith (1997) assess the volcanic hazard (probability of at least one disr
 ***
 
 *Bayesian Analysis of Time Evolution of Earthquakes*:
-Peruggia and Santner (1996) use a Bayesian approach to analyse the occurrence times and magnitude of seismic events. In this context, they use occurrence times and magnitudes for seismic events of the Sannio Matese region in Italia. 
+Peruggia and Santner (1996) use a Bayesian approach to analyse the occurrence times and magnitude of seismic events. In this context, they use occurrence times and magnitudes for seismic events of the Sannio Matese region in Italia. The research area has numerous heterogeneous seismic activities that can be easily visualized by dynamically developing the functional (e.g. median) conditional posterior intensity over time. Researchers can then determine which seismic activities exist at specific locations and thus the risk for the affected sites and their surroundings. 
 
 ***
 
@@ -319,15 +327,11 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 *In the past few years, there is an increasing number of studies focusing on tropical cyclones and whether they will increase in frequency and strength over the course of time. In this context, meteorologist Irma is interested in the expectation rate of tropical cyclones for an isolate island in the Indian Ocean that has not yet been properly researched. She obtained a dataset that shows the number of tropical cyclones in the Indian Ocean around this island per year. In order to get a better assessment of the hazard associated with cyclones, she wishes to learn about the cyclone rates that are most probable.*
 
 </div>
-
-```{r}
-#<center>
-#![Figure 1: The strongest tropical cyclones in the satellite record since 1979 (Rahmsdorf, 2018).](images/123.png)
-#</center>
-```
-
 <br><br>
 
+![Figure 1: The strongest tropical cyclones in the satellite record (since 1979)(Rahmsdorf 2018)](images/123.png)
+
+<br><br>
 In order to estimate the most probable annual rate of cyclones from the dataset, we use a **Poisson distribution** for the occurrence of cyclones (likelihood). A Poisson distribution should be chosen whenever one is interested in the calculation of the event rates from a dataset that contains the number of counts of these events in a fixed time interval. In general, the Poisson distribution is a discrete probability distribution that shows the probability of a given number of events in a specified interval (also known as expectation rate), assuming that these events are independent (Manning & Schuetze 1999: 545).
 The Bayes' Rule for Irma's problem looks as follows:
 $$p(\lambda|D)=\frac{p(D|\lambda) p(\lambda)}{p(D)}$$
@@ -343,7 +347,7 @@ The data (counts of tropical cyclones per year) that Irma obtained for the years
 
 
 ```{r}
-#number of cyclones per year over the last 10 years
+# number of cyclones per year over the last 10 years
 cyclones <- c(9, 13, 8, 3, 10, 6, 13, 15, 16, 14)
 ```
 
@@ -354,7 +358,7 @@ The values in this and the following examples are fictitious and not based on sc
 First of all, all possible outcomes for the annual number of tropical cyclones that could have been occurred are defined based on our previous knowledge. The lower limit of our prior assumption is set to 0 cyclones per year since years without tropical cyclones are possible. Based on a previous study - [The Global Climatology of Tropical Cyclones](http://oxfordre.com/naturalhazardscience/view/10.1093/acrefore/9780199389407.001.0001/acrefore-9780199389407-e-79) - the upper limit is set to 80 cyclones per year. Therefore, we define a vector that contains integers from 0 to 80, that represents the number of cyclones per year. 
 
 ```{r}
-#define all possible outcomes for the expectation rate
+# define all possible outcomes for the expectation rate
 prior <- seq(from = 0, to = 80, by = 1) 
 ```
 
@@ -362,7 +366,7 @@ prior <- seq(from = 0, to = 80, by = 1)
 We assume that Irma has no information about which of the cyclone rates is more probable. Thus, a discrete **uniform probability distribution** is used to give the same weight to all these possible outcomes for the cyclone rates. This results in equally probable cyclone rates. The prior probability, described before, is easily calculated by assigning each outcome the reciprocal of the total number of outcomes.
 
 ```{r}
-#create uniformly distributed cyclone rates
+# create uniformly distributed cyclone rates
 prior_prob <- rep(1/length(prior),times = length(prior)) 
 
 ```
@@ -389,11 +393,11 @@ grid()
 In the following step, the likelihood (probability of the observed annual cyclone counts given the prior-defined expectation rates) is calculated. As mentioned above, we use a Poisson distribution as best description of the problem of cyclone events. Since all cyclone events are independent of each other, the likelihood can be calculated by multiplying several Poisson distributions. For each distribution, Irma's dataset is the fixed input variable but the used event rate $\lambda$ differs. Here, each value of the prior assumption (about expectation rate), specified above, is used.
 
 ```{r}
-#create a vector with the same number of entries as in "prior" as storage for calculated products
+# create a vector with the same number of entries as in "prior" as storage for calculated products
 likeli <- rep(NA,length(prior))
 
-#using a loop for the calculation of the likelihood
-#Poisson distribution: use of dpois with cyclones as input variable and prior belief (ourcomes) as rate parameter
+# using a loop for the calculation of the likelihood
+# Poisson distribution: use of dpois with cyclones as input variable and prior belief (ourcomes) as rate parameter
 
 
 for (i in seq_along(prior))
@@ -404,7 +408,7 @@ for (i in seq_along(prior))
 ```
 
 ```{r, fig.cap = "Figure 3: Calculated likelihood for the annual cyclone rate.", fig.align="center", echo=FALSE}
-#plot the likelihood
+# plot the likelihood
 
 plot(prior, likeli,
      type ="h", 
@@ -422,15 +426,15 @@ grid()
 The calculated probability distribution for the prior and the likelihood function are used to update the prior probability to the posterior probability of cyclone expectation rates. It is necessary to multiply the likelihood with the prior probability. Instead of dividing the result by the evidence, as stated in Bayes' Rule, we use the renormalization approach. The product of prior and likelihood is divided by the sum of all possible outcomes.
 
 ```{r}
-#calculate the posterior
+# calculate the posterior
 bayes_rate <- likeli * prior_prob
 bayes_rate <- bayes_rate/ sum(bayes_rate)
 
-#which(c(bayes_rate) == max (bayes_rate))
+# which(c(bayes_rate) == max (bayes_rate))
 ```
 
 ```{r, fig.cap = "Figure 4: Posterior probability distribution of annual cyclone rates.", fig.align="center", echo=FALSE}
-#plot the posterior probability distribution
+# plot the posterior probability distribution
 plot(prior, bayes_rate, 
      type = "h", 
      main = "Posterior probability distribution of annual cyclone rates", 
@@ -440,7 +444,7 @@ plot(prior, bayes_rate,
      col="dodgerblue3")
 grid()
 
-#plot a vertical line for most probable rate 
+# plot a vertical line for most probable rate 
 abline(v = 11, lty = 2, lwd = 2, col = "firebrick3")
 
 legend(57, 0.35, legend = c("most probable rate"),
@@ -464,40 +468,17 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 
 </div>
 
-```{r}
-#<center>
-#side by side ![](doggy.jpeg) ![](kitty.jpeg)
+<br><br>
 
-#![Figure 5:  Su Village (Sucun) landslide in Zhejiang Province, China (Ouyang et al., 2019).](ADD NAME)
+<div style="display:flex; align-content:flex-start;flex-wrap:wrap;">
+<img src="images/fig5.jpg" style="width:42%;" /> 
+<img src="images/fig6.jpg" style="width:56%;" />
 
-##landslides: https://blogs.agu.org/landslideblog/
+<span style="width:42%;display:inline-flex;">Figure 5:  Su Village (Sucun) landslide in Zhejiang Province, China (Ouyang et al., 2019)</span>
+<span style="width:56%;display:inline-flex;padding-left: 10px;">Figure 6:  Pareto probability distribution function, with fixed scale parameter and varying shape parameters (boost.org)</span6
+</div>
 
-#![Figure 6:  Pareto probability distribution function, with fixed scale parameter and varying shape parameters (boost.org).](ADD NAME)
 
-##pareo: https://live.boost.org/doc/libs/1_39_0/libs/math/doc/sf_and_dist/html/math_toolkit/dist/dist_ref/dists/pareto.html
-
-#</center>
-```
-
-```{r image_grobs, fig.show = "hold", out.width = "50%", fig.align = "default"}
-
-#knitr::include_graphics("https://www.capitalfm.co.ke/news/files/2019/02/LANDSLIDE.jpg")
-
-#knitr::include_graphics("https://actuarialmodelingtopics.files.wordpress.com/2017/05/pareto-pdfs.jpg")
-
-#.center[
-
-#![My image](https://upload.wikimedia.org/wikipedia/commons/b/be/Sharingan_triple.svg)
-
-#.caption[
-#**Fig. 1:** Image caption
-#]
-
-#]
-
-#Option 2: https://github.com/yihui/xaringan/issues/30
-
-```
 <br><br>
 
 
@@ -659,18 +640,12 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 
 </div>
 
+<br><br>
 
-```{r}
-#<center>
-#side by side ![](doggy.jpeg) ![](kitty.jpeg)
 
-#![Figure 11:  ](ADD NAME)
+![Figure 11: The result of a natural disaster(USAID)](images/fig11.jpg)
 
-##add caption!!
-##https://www.usaid.gov/what-we-do/working-crises-and-conflict/disaster-risk-reduction/usaidofda-disaster-risk-reduction
 
-#</center>
-```
 <br><br>
 
 In this context, we compare the damage potential of three natural hazards (earthquakes, rockfalls, floods). In order to solving this problem, a **binomial distribution** is chosen to **estimate the success probability (the probability of the occurrence of a certain number of natural disasters with major damages relative to the total number of natural disaster)** (binomial likelihood).
@@ -731,13 +706,13 @@ prior_prob_flood <- prior_prob_flood/sum(prior_prob_flood)
 
 ```{r, fig.cap = "Figure 12: Prior probability distribution of the major damage (success) probability p for earthquakes (blue), rockfalls (green) and floods (orange).", fig.align="center", fig.width = 10, fig.height=9, out.width = "1000px", echo=FALSE}
 par(mfrow = c(3,1))
-plot(prior_EQ,prior_prob_EQ, type = "h", xlab = "Major damage probability", ylab = "Prior probability", lwd = 2, col="skyblue3")
+plot(prior_EQ,prior_prob_EQ, type = "h", xlab = "Major damage probability", ylab = "Prior probability", lwd = 2, col="skyblue3", cex.lab = 1.5)
 grid()
 
-plot(prior_rock,prior_prob_rock, type = "h", xlab = "Major damage probability", ylab = "Prior probability", lwd = 2, col="seagreen3")
+plot(prior_rock,prior_prob_rock, type = "h", xlab = "Major damage probability", ylab = "Prior probability", lwd = 2, col="seagreen3", cex.lab = 1.5)
 grid()
 
-plot(prior_flood,prior_prob_flood, type = "h", xlab = "Major damage probability", ylab = "Prior probability", lwd = 2, col="darkorange3")
+plot(prior_flood,prior_prob_flood, type = "h", xlab = "Major damage probability", ylab = "Prior probability", lwd = 2, col="darkorange3", cex.lab = 1.5)
 grid()
 ```
 <br><br>
@@ -769,11 +744,11 @@ for (i in seq_along(prior_flood)) {
 ```{r, fig.cap = "Figure 13: Likelihood for the investigated problem by using the earthquake (blue), rockfall (green) and flood (orange) dataset, respectively.", fig.align="center", fig.width = 10, fig.height=9, out.width = "1000px", echo=FALSE}
 
 par(mfrow = c(3,1))
-plot(prior_EQ, likeli_EQ, type="h",xlab = "Major damage probability", ylab = "Likelihood", lwd = 2, col="skyblue3")
+plot(prior_EQ, likeli_EQ, type="h",xlab = "Major damage probability", ylab = "Likelihood", lwd = 2, col="skyblue3", cex.lab = 1.5)
 grid()
-plot(prior_rock, likeli_rock, type="h", xlab = "Major damage probability", ylab = "Likelihood", lwd = 2, col="seagreen3")
+plot(prior_rock, likeli_rock, type="h", xlab = "Major damage probability", ylab = "Likelihood", lwd = 2, col="seagreen3", cex.lab = 1.5)
 grid()
-plot(prior_flood, likeli_flood, type="h", xlab = "Major damage probability", ylab = "Likelihood", lwd = 2, col="darkorange3")
+plot(prior_flood, likeli_flood, type="h", xlab = "Major damage probability", ylab = "Likelihood", lwd = 2, col="darkorange3", cex.lab = 1.5)
 grid()
 
 ```
@@ -808,15 +783,15 @@ max_flood <- prior_flood[which.max(posterior_flood)]
 ```{r, fig.cap = "Figure 14: Posterior probability distribution of the major damage (success) probability p for earthquakes (blue), rockfalls (green) and floods (orange).", fig.align="center", fig.width = 10, fig.height=9, out.width = "1000px", echo=FALSE}
 
 par(mfrow = c(3,1))
-plot(prior_EQ, posterior_EQ, type="h", xlab = "Major damage probability", ylab = "Posterior probability", lwd = 2, col="skyblue3")
+plot(prior_EQ, posterior_EQ, type="h", xlab = "Major damage probability", ylab = "Posterior probability", lwd = 2, col="skyblue3", cex.lab = 1.5)
 legend(0.85, 0.05, legend = c("most probable p"),
       col = c("firebrick3"), lty = 2, lwd = 1, cex = 0.8)
 abline(v = max_EQ, lty = 2, lwd = 2, col = "firebrick3")
 grid()
-plot(prior_rock, posterior_rock, type="h", xlab = "Major damage probability", ylab = "Posterior probability", lwd = 2, col="seagreen3")
+plot(prior_rock, posterior_rock, type="h", xlab = "Major damage probability", ylab = "Posterior probability", lwd = 2, col="seagreen3", cex.lab = 1.5)
 abline(v = max_rock, lty = 2, lwd = 2, col = "firebrick3")
 grid()
-plot(prior_flood, posterior_flood, type="h", xlab = "Major damage probability", ylab = "Posterior probability", lwd = 2, col="darkorange3")
+plot(prior_flood, posterior_flood, type="h", xlab = "Major damage probability", ylab = "Posterior probability", lwd = 2, col="darkorange3", cex.lab = 1.5)
 abline(v = max_flood, lty = 2, lwd = 2, col = "firebrick3")
 grid()
 ```
@@ -827,8 +802,76 @@ The calculated probability distributions in Figure 14 show that the estimated ma
 
 ## **5. Conclusion**
 
+This report deals with the fields of application of the Bayes' Rule in connection with natural hazards. 
+
+In the first section, therefore, the basics for the calculation and procedure are first explained. To make this clearer, 20 selected papers were analyzed and the most important parameters for the application of the Bayes' Rule were determined. Subsequently, self-selected examples were created. These serve once again for a better understanding and comprehensibility of the Bayesian approach.
+
+With the help of this report, we were able to better determine probabilities and quantify uncertainties. This method is the focus of numerous papers in order to better analyze and predict specific natural hazards.
+
+It can generally be said that the Bayesian Approach is a fundermentary approach to statistical calculation with a focus on natural hazards. For example, as the prediction of specific natural hazards is a sensitive issue, it is important not only to determine the mean of past events. That's why the Bayes' Rule also works with a natural interpretation of statistical confidence. Furthermore, the confidence statements of observed data depend. In addition, the Bayesian Rule focuses primarily on the interpretation of parameters, such as likelihood or even prior. The most important point to mention here is that the Bayesian approach offers an automatic method of updating probabilities (Albert 1995: 13).
+
+Of course, these just mentioned advantages are also critical points. Of course, the interpretation of the parameters is in the focus, but it must be noted that numerous parameters can also cause errors. Finally, the calculations are based on the determination of specific parameters. If these are then determined, uncertainties occur which should then be taken into account in the new calculations for the subsequent parameter. The successive computing steps require a certain amount of complexity. In addition, the facts could be questioned in a comprehensible way.
+
 ## **6. References**
 
+ALBERT, Jim, 1995. *Teaching Inference about Proportions Using Bayes and Discrete Models*. Journal of Statistics Education [last access: 15.02.2019]. DOI: 10.1080/10691898.1995.11910494 
+
+BERTI, M. et al. 2012. *Probabilistic rainfall thresholds for landslide occurrence using a Bayesian approach*. Journal of Geophysical Research: Earth Surface, 117. Jg., Nr. F4.
+
+BULMER, Michael, G, 1979. *Principles of Statistics. 1. edition*. Chelmsford (Massachusetts): Courier Corporation . ISBN 978-0-486-63760-0 
+
+CENTRE FOR RESEARCH ON THE EPIDEMIOLOGY OF DISASTERS - CRED, 2009. EM-DAT: *The international distaster database* [online]. Centre for Research on the Epidemiology of Disasters - CRED, [last access: 05.02.2019]. available on: [EM-DAT](https://www.emdat.be/)
+
+CHENG, Vincent YS, et al. 2013. *Probability of tornado occurrence across Canada*. Journal of Climate, 26. Jg., Nr. 23, S. 9415-9428.
+
+COLES, Stuart; TAWN, Jonathan., 2005. *Bayesian modelling of extreme surges on the UK east coast*. Philosophical Transactions of the Royal Society of London A: Mathematical, Physical and Engineering Sciences, 363. Jg., Nr. 1831, S. 1387-1406.
+
+ELSNER, James B., JAGGER, Thomas H., 2004. *A  hierarchical Bayesian approach to seasonal hurricane modeling*. Journal of Climate, 17. Jg., Nr. 14, S. 2813-2827.
+
+FERRAES, Sergio G., 1985. *The Bayesian probabilistic prediction of strong earthquakes in the Hellenic arc*. Tectonophysics, 111. Jg., Nr. 3-4, S. 339-354.
+
+FLETSCHER, Steven, J. 2017. Data Assimilation for the Geosciences: From Theory to Application. 1. edition. Amsterdam: Elsevier. ISBN 978-0-128-04484-1 
+
+GREEN, Rebecca M., et al., 2016. *Estimation of tephra volumes from sparse and incompletely observed deposit thicknesses*. Bulletin of Volcanology, 78. Jg., Nr. 4, S. 25.
+
+HO, Chih-Hsiang, SMITH, Eugene I., 1997. *Volcanic hazard assessment incorporating expert knowledge: application to the Yucca Mountain region, Nevada, USA*. Mathematical geology, 29. Jg., Nr. 5, S. 615-627.
+
+International Journal of Climatology, 2013. *Bayesian approach to detecting change points in climatic records*. 33. Jg., Nr. 2, S. 520-528.
+
+JHA, Abhas K., 2010. *Safer Homes, Stronger Communities: A Handbook for Reconstructing after Natural Disasters*. 1. edition. Washington DC: World Bank Publications. ISBN 978-0-821-38268-4 
+
+KRUSCHKE, John, 2010. *Doing Bayesian Data Analysis: A Tutorial Introduction with R*. 1. edition. Oxford: Academic Press. ISBN 978-0-123-81486-9 
+
+LOPEZ, Ana, et al. 2006. *Two approaches to quantifying uncertainty in global temperature changes*. Journal of Climate, 19. Jg., Nr. 19, S. 4785-4796.
+
+MADDOCK, John et al. 2006. *Pareto Distribution* [online]. Boost C++ Libraries [last access: 10.02.2019]. available on: [boost.org](https://live.boost.org/doc/libs/1_39_0/libs/math/doc/sf_and_dist/html/math_toolkit/dist/dist_ref/dists/pareto.html)
+ 
+
+MANNING, Christopher D. & SCHÜTZE, Hinrich, 1999. *Foundations of Statistical Natural Language Processing*. 1. edition. London: MIT Press . ISBN  978-0-262-13360-9 
+
+MARZOCCHI, W.; SANDRI, L.; FURLAN, C., 2006. *A quantitative model for volcanic hazard assessment*.
+
+MEINSHAUSEN, Malte, et al., 2009. *Greenhouse-gas emission targets for limiting global warming to 2 °C*. Nature, 458. Jg., Nr. 7242, S. 1158.
+
+MIN, Seung-Ki; HENSE, Andreas; KWON, Won-Tae, 2005.* Regional-scale climate change detection using a Bayesian decision method*. Geophysical research letters, 32. Jg., Nr. 3.
+
+OLIVER, Willard M., MARION, Nancy E. und HILL, Joshua B., 2014. *Introduction to Homeland Security: Policy, Organization, and Administration*. 1. edition. Burlington (Massachusetts): Jones & Bartlett. ISBN 978-1-449-64545-8 
+
+PERUGGIA, Mario; SANTNER, Thomas., 1996. *Bayesian analysis of time evolution of earthquakes*. Journal of the American Statistical Association, 91. Jg., Nr. 435, S. 1209-1218.
+
+RAHMSTORF, Stefan et al., 2018. *Are tropical cyclones getting wetter and stronger?* [online]. Climate and Capitalism, [last access: 15.02.2019]. available on: [www.climateandcapitalism.com](https://climateandcapitalism.com/2018/05/30/are-tropical-cyclones-getting-wetter-and-stronger/)
+
+ROSSANO, S., et al., 1996. *Computer simulation of pyroclastic flow movement: an inverse approach*. Geophysical research letters, 23. Jg., Nr. 25, S. 3779-3782.
+
+STARK, Colin, P. 2002. *A simple theory of landslide failure and size distribution. In prep. for submission to Nature*. Lamont-Doherty Earth Observatory of Columbia University.
+
+STONE, James V., 2013. *Bayes' Rule: A Tutorial Introduction to Bayesian Analysis*. 1. edition. Oxford: Sebtel Press. ISBN 978-0-956-37284-0 
+
+TIWARI, Ram C., ZALKIKAR, Jyoti N., 1990. *Empirical Bayes estimation of the scale parameter in a Pareto distribution*. Computational Statistics & Data Analysis 10. Jg., Nr. 3, S. 261-270.
+
+UNITED STATES AGENCY FOR INTERNATIONAL DEVELOPMENT - USAID, 1961. *USAID/OFDA's Approach to Disaster Risk Reduction* [online]. United States Agency For International Development - USAID, [last access: 14.02.2019]. available on: [www.usaid.gov](https://www.usaid.gov/what-we-do/working-crises-and-conflict/disaster-risk-reduction/usaidofda-disaster-risk-reduction)
+
+WERNER, Angelika; HOLBROOK, Neil J., 2011. A. *Bayesian forecast model of Australian region tropical cyclone formation*. Journal of Climate,  24. Jg., Nr. 23, S. 6114-6131.
 
 
 
